@@ -1,0 +1,11 @@
+{
+   "EcommerceApp" :
+   [
+      {
+         "cat_title":"Prueba x",
+         "cat_image":"category_mobile.jpg",
+         "cat_image_banner":"category_mobile_banner.jpg",
+         "cat_item_no":"0 products"
+      }
+   ]
+}

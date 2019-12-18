@@ -1,0 +1,11 @@
+{
+   "producto" :
+[
+   {
+      "gallery_image":"gallery_1.png" },
+   {
+      "gallery_image":"gallery_2.png"},
+   {
+      "gallery_image":"gallery_3.png"}
+]
+}

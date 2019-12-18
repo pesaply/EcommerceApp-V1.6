@@ -1,0 +1,193 @@
+<resources>
+    <string name="app_name">SISCOM</string>
+    <string name="tag_line">Your favourite Ecommerce</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings" translatable="false">Settings</string>
+    <string name="drawer_open">Drawer Open</string>
+    <string name="drawer_close">Drawer Close</string>
+    <string name="cat_list">Lista Categorias</string>
+    <string name="coupon_detail">Coupon Detail</string>
+    <string name="coupon_list">Coupon List</string>
+    <string name="payment_screen">Payment</string>
+    <string name="product_detail">Detalle Producto</string>
+    <string name="search_screen">Buscar</string>
+    <string name="setting_screen">Ajustes</string>
+    <string name="trending_screen">Trending List</string>
+    <string name="gallery_screen">Galeria</string>
+    <string name="rating_text">Rating</string>
+    <string name="write_review">Write your review here</string>
+    <string name="review_msg_thanks">Thanks for rating</string>
+    <string name="profile_name">Nombre:-</string>
+    <string name="profile_email">Email:-</string>
+    <string name="profile_password">Contraseña:-</string>
+    <string name="profile_re_password">Confirmar Contraseña:-</string>
+    <string name="profile_phone">Telefono:-</string>
+    <string name="profile_Address">Direccion:-</string>
+    <string name="profile_pincode">Pincode:-</string>
+    <string name="profile_city">Ciudad</string>
+    <string name="pofile_landmark">Landmark:-</string>
+    <string name="min_value">Min:-</string>
+    <string name="max_value">Max:-</string>
+
+    <string name="next">Siguiente</string>
+    <string name="skip">Saltar</string>
+    <string name="start">Listo</string>
+
+    <string name="slide_1_title">Descubre</string>
+    <string name="slide_1_desc">Explora Nuestros Productos, Precios, Existencias y Realiza tu Pedido desde el Aula</string>
+
+    <string name="slide_2_title">Promociones</string>
+    <string name="slide_2_desc">Recibe Cupones de Descuento por tus Compras desde la Aplicación</string>
+
+    <string name="slide_3_title">Experiencia</string>
+    <string name="slide_3_desc">Consigue la Mejor Calidad por el Mejor Precio</string>
+    <string name="search_here_home">Buscar Productos</string>
+
+    <string name="add_to_fav">Add to favorite</string>
+    <string name="remove_fav">Remove favorite</string>
+
+    <string name="email">Email</string>
+    <string name="password">Contraseña</string>
+    <string name="remember">Recordarme</string>
+    <string name="login">Entrar</string>
+    <string name="skip_btn">Saltar</string>
+    <string name="forgot_pass">¿Olvidaste tu Contraseña?</string>
+    <string name="register">Registrarse</string>
+    <string name="first_name">Nombre</string>
+    <string name="last_name">Apellidos</string>
+    <string name="conform_password">Confirmar Contraseña</string>
+    <string name="submit">Siguiente</string>
+    <string name="already_account">¿Ya Tienes una Cuenta?</string>
+    <string name="telefono">Telefono</string>
+    <string name="fechaNan">Fecha de Nacimiento</string>
+    <string name="escuela">Escuela</string>
+    <string name="codigopostal">Codigo Postal</string>
+    <string name="sucursal">Sucursal</string>
+
+    <!--left navigation drawer-->
+    <string name="menu_home">Home</string>
+    <string name="menu_category">Categoría</string>
+    <string name="menu_favourite">Favoritos</string>
+    <string name="menu_gift_card">Gift Cards</string>
+    <string name="menu_refer">Refer &amp; Earn</string>
+    <string name="menu_order">Mi Orden</string>
+    <string name="menu_setting">Ajustes</string>
+    <string name="menu_search">Buscar</string>
+    <string name="menu_logout">Cerrar Sesión</string>
+    <string name="menu_theme_change">Change Theme</string>
+    <string name="no_item_found">No Item Found</string>
+    <string name="notification">Notificationes</string>
+    <string name="no_notification">No Notification</string>
+
+    <string name="home_category">Navegar por Categoria</string>
+    <string name="home_latest">Productos</string>
+    <string name="home_discount_coupon">Cupones de Descuento</string>
+    <string name="home_trending">Ofertas</string>
+    <string name="home_view">Ver Todas</string>
+
+    <string name="text_filter">Filter</string>
+    <string name="product_specification">Detalle del Producto</string>
+    <string name="product_delivery">Delivery : -</string>
+    <string name="product_description">Descripción:</string>
+    <string name="no_cost">No Cost EMI</string>
+    <string name="product_review">Product Review : -</string>
+    <string name="select_size">Select Size</string>
+    <string name="select_color">Especificacion Tecnica</string>
+    <string name="select_filter">Filters</string>
+    <string name="product_buy">Comprar</string>
+    <string name="product_cart">Agregar </string>
+    <string name="product_color">Colour</string>
+    <string name="product_price">Precio</string>
+    <string name="product_size">Size</string>
+    <string name="my_cart">My Cart</string>
+    <string name="change_pin">Change</string>
+    <string name="con_shopping">Shopping</string>
+    <string name="place_order">Place Order</string>
+    <string name="total_item">Total :- </string>
+    <string name="remove_item">Remove</string>
+    <string name="item_added_cart">Item added to cart</string>
+    <string name="apply">Apply</string>
+    <string name="purchase_product">Purchase Product</string>
+    <string name="cash_on">Cashondelivery</string>
+
+    <string name="order_cancel">Cancel</string>
+    <string name="order_payment">Payment</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="paypal_pay">PayPal</string>
+    <string name="stipe_pay">Stripe</string>
+    <string name="cod_pay">Cash on Delivery</string>
+    <string name="account_pay">Account Payable</string>
+    <string name="now_pay">Pay Now</string>
+    <string name="congratulation_title">Congratulation</string>
+    <string name="congratulation_msg">We will send you an email  just your order will be shipped.</string>
+    <string name="congratulation_ok">OKAY</string>
+    <string name="seller">Seller:-</string>
+    <string name="delivery">Delivery By:-</string>
+
+    <string name="stage_address">Address</string>
+    <string name="stage_deliver">Delivered</string>
+    <string name="stage_cancel">Canceled</string>
+    <string name="share_msg">Hi,I would like to share Application which is used to watch live tv free please download it from Google Play Store Free Here \n https://play.google.com/store/apps/details?id=</string>
+    <string name="favourite_add">Favourite has been saved</string>
+    <string name="favourite_remove">Favourite has been removed</string>
+
+    <string name="setting_notification">Notification Settings</string>
+    <string name="setting_rate">Rate App</string>
+    <string name="setting_more">More App</string>
+    <string name="setting_share">Share App</string>
+    <string name="setting_privacy">Privacy Policy</string>
+    <string name="setting_profile">Profile</string>
+    <string name="setting_edit_profile">Edit Profile</string>
+    <string name="setting_manage">Manage Address</string>
+    <string name="setting_address">My Address</string>
+    <string name="setting_edit_address">Edit Address</string>
+
+    <string name="admob_banner_id">ca-app-pub-3940256099942544/6300978111</string> <!-- Change AdMob Banner Id -->
+    <string name="admob_interstitial_id">ca-app-pub-3940256099942544/1033173712</string> <!-- Change AdMob Interstitial Id -->
+
+    <string name="exit_msg">Are You Sure You Want To Quit?</string>
+    <string name="more_app_link">https://play.google.com/store/apps/developer?id=WhatsApp+Inc.</string>
+
+    <string-array name="color_array">
+        <item>#FF5152</item>
+        <item>#000000</item>
+        <item>#C1573F</item>
+        <item>#F6B575</item>
+        <item>#A39C94</item>
+        <item>#FFD867</item>
+
+    </string-array>
+
+    <string-array name="size_array">
+        <item>XXS</item>
+        <item>S</item>
+        <item>M</item>
+        <item>L</item>
+        <item>XL</item>
+        <item>3XL</item>
+    </string-array>
+
+    <string-array name="filter_brand_array">
+        <item>Anna Sui</item>
+        <item>Adidas</item>
+        <item>Calvin Klein</item>
+        <item>Burton</item>
+        <item>Columbia</item>
+        <item>Diesel</item>
+    </string-array>
+
+    <string name="login_fb">Login with Facebook</string>
+    <string name="login_gmail">Sign in with Google+</string>
+
+    <string name="tab_1">WOMEN</string>
+    <string name="tab_2">MEN</string>
+    <string name="tab_3">YOUNG BOY</string>
+    <string name="tab_4">ALL TIME</string>
+
+    <string name="theme2_stage_address">Delivery Address</string>
+    <string name="theme2_stage_deliver">Delivery Order</string>
+    <string name="theme2_stage_cancel">Order Canceled</string>
+
+    <string name="email_conform">Order confirmation email will be send to</string>
+    <string name="email_user">info@viaviweb.com</string>
+</resources>

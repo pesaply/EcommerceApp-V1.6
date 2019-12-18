@@ -1,0 +1,97 @@
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/toolbar_main"
+            layout="@layout/row_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true" />
+
+        <LinearLayout
+            android:id="@+id/lay_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar_main"
+            android:background="@color/colorPrimary">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_view_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="2dp"
+                app:cardUseCompatPadding="false"
+                app:elevation="5dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp">
+
+                    <Button
+                        android:id="@+id/edt_home_search"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                         android:layout_marginLeft="5dp"
+                        android:layout_centerVertical="true"
+                        android:imeOptions="actionSearch"
+                        android:layout_toLeftOf="@+id/image_home_search"
+                        android:layout_toStartOf="@+id/image_home_search"
+                        android:background="@drawable/edittext_corner"
+                        android:hint="@string/search_here_home"
+                        android:inputType="textPersonName"
+                         android:textColor="@color/gray" />
+
+                    <ImageView
+                        android:id="@+id/image_home_search"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_margin="3dp"
+                        android:src="@drawable/ic_home_search" />
+
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/adView"
+            android:layout_below="@+id/lay_search"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/Container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                />
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/navigation_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/left_nav_header"
+        app:itemIconTint="@color/state_list"
+        app:itemTextColor="@color/state_list"
+        app:menu="@menu/menu_drawer" />
+</android.support.v4.widget.DrawerLayout>

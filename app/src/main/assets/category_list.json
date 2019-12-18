@@ -1,0 +1,72 @@
+{
+   "EcommerceApp" :
+   [
+      {
+         "cat_list_title":"Fuente Conmutada",
+         "cat_list_image":"product_siscom1.jpg",
+         "cat_list_description":"Power by an intel Core 2 DUO preocess",
+         "cat_list_price":"₹419"
+      },
+      {
+         "cat_list_title":"Drone DJI Tello",
+         "cat_list_image":"product_siscom2.jpg",
+         "cat_list_description":"Power by an intel Core 2 DUO preocess",
+         "cat_list_price":"₹359"
+      },
+      {
+         "cat_list_title":"Cable Plano",
+         "cat_list_image":"producto_siscom3.jpg",
+         "cat_list_description":"Power by an intel Core 2 DUO preocess",
+         "cat_list_price":"₹701"
+      },
+      {
+         "cat_list_title":"Relevador de Temp",
+         "cat_list_image":"producto_siscom4.jpg",
+         "cat_list_description":"Power by an intel Core 2 DUO preocess",
+         "cat_list_price":"₹1,799"
+      },
+      {
+         "cat_list_title":"COnvertidor A/D",
+         "cat_list_image":"producto_siscom5.jpg",
+         "cat_list_description":"Power by an intel Core 2 DUO preocess",
+         "cat_list_price":"₹594"
+      },
+      {
+         "cat_list_title":"DIAC VBO 32V",
+         "cat_list_image":"producto_siscom6.jpg",
+         "cat_list_description":"Power by an intel Core 2 DUO preocess",
+         "cat_list_price":"₹359"
+      }
+   ,
+      {
+         "cat_list_title":"Avalancha Controlada 130V 1A",
+         "cat_list_image":"producto_siscom7.jpg",
+         "cat_list_description":"Power by an intel Core 2 DUO preocess",
+         "cat_list_price":"₹359"
+      },
+      {
+         "cat_list_title":"Sensor de Efecto Hall",
+         "cat_list_image":"producto_siscom8.jpg",
+         "cat_list_description":"Power by an intel Core 2 DUO preocess",
+         "cat_list_price":"₹701"
+      },
+      {
+         "cat_list_title":"Buzzer 20mA/1.5v 300HZ 70dB",
+         "cat_list_image":"producto_siscom9.jpg",
+         "cat_list_description":"Power by an intel Core 2 DUO preocess",
+         "cat_list_price":"₹1,799"
+      },
+      {
+         "cat_list_title":"Inductor SMD 150UH F=100KHZ",
+         "cat_list_image":"producto_siscom10.jpg",
+         "cat_list_description":"Power by an intel Core 2 DUO preocess",
+         "cat_list_price":"₹594"
+      },
+      {
+         "cat_list_title":" Polka Print Blue Top",
+         "cat_list_image":"producto_siscom11.jpg",
+         "cat_list_description":"Harpa Navy Women Printed Tops 100% Polyester hand Wash in cold Water. Dry in shade for Lasting Color.",
+         "cat_list_price":"₹359"
+      }
+   ]
+}

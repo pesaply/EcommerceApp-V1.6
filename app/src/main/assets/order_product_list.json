@@ -1,0 +1,35 @@
+{
+   "EcommerceApp" :
+   [
+      {
+         "order_title":"Women's Dark Top",
+         "order_image":"cat_list_top.png",
+         "order_seller":"Sukun Dresses",
+         "order_price":"₹419",
+         "order_offer":"₹55 %",
+         "order_discount":"₹200",
+         "order_delivery_date":"Fri,Dec,10",
+         "order_quantity":"10"
+      },
+      {
+         "order_title":"Casual Cap Sleeve",
+         "order_image":"cat_list_top2.png",
+         "order_seller":"Sukun Dresses",
+         "order_price":"₹459",
+         "order_offer":"₹50 %",
+         "order_discount":"₹300",
+         "order_delivery_date":"Fri,Dec,20",
+         "order_quantity":"10"
+      },
+      {
+         "order_title":"Half Sleeve Top",
+         "order_image":"cat_list_top3.png",
+         "order_seller":"Sukun Dresses",
+         "order_price":"₹701",
+         "order_offer":"₹75 %",
+         "order_discount":"₹500",
+         "order_delivery_date":"Fri,Dec,15",
+         "order_quantity":"10"
+      }
+   ]
+}
