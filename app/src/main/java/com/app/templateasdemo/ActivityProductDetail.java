@@ -5,12 +5,15 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,6 +22,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -33,6 +37,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.app.templateasdemo.Retrofit.INodeJS;
+import com.app.templateasdemo.Retrofit.INodeJSCarrito;
+import com.app.templateasdemo.Retrofit.RetrofitClient;
 import com.example.adapter.GalleryAdapter;
 import com.example.adapter.ReviewListAdapter;
 import com.example.adapter.SelectColorAdapter;
@@ -43,9 +50,14 @@ import com.example.item.ItemColorSize;
 import com.example.item.ItemGallery;
 import com.example.item.ItemOrderProduct;
 import com.example.item.ItemReview;
+import com.example.itemCarrito.ItemCarrito;
 import com.example.util.ItemOffsetDecoration;
 import com.example.util.RecyclerItemClickListener;
 import com.github.ornolfr.ratingview.RatingView;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.squareup.picasso.Picasso;
 
@@ -57,8 +69,24 @@ import org.w3c.dom.Text;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ActivityProductDetail extends AppCompatActivity {
+
+
+    INodeJSCarrito MyapiCarrito ;
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     RecyclerView recyclerViewDetail, recycler_detail_review, recyclerView_color, recyclerView_size, recyclerView_order_place;
     ImageView ImgDetail;
@@ -67,6 +95,7 @@ public class ActivityProductDetail extends AppCompatActivity {
     ArrayList<ItemReview> array_review;
     ReviewListAdapter adapter_review;
     ItemGallery itemGalleryList;
+    ItemCarrito itemCarrito;
     TextView text_product_name, text_product_price, text_no_cost, text_product_rate, text_select_size, text_select_color,
             text_product_buy, text_product_cart, txt_order_total_rs, txt_order_item, text_product_con_shop, text_product_place_order;
     EditText edt_pincode;
@@ -82,12 +111,41 @@ public class ActivityProductDetail extends AppCompatActivity {
     ScrollView scrollView;
     TextView pdfD;
 
+    String sucursalExistencia;
+    String nombre;
+    String _id;
+    int existenciaGlobal = 0;
+    int ArticulosAgregados = 0;
 
-
-
+    private static final int REQUEST_CODE = 1;
 
     private RequestQueue queue;
     private String idProductoGlobal;
+    private boolean existe = false;
+    private boolean ShoppingCart;
+    private  int indexproductocarrito;
+
+    @Override
+    protected void onStop() {
+        compositeDisposable.clear();
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        compositeDisposable.clear();
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        nombre =  getValueFromSharedPreferences("nombre","");
+        sucursalExistencia = getValueFromSharedPreferences("sucursal", "5df519d8cfd0fe1348d57ff9");
+        _id = getValueFromSharedPreferences("_id", "");
+        loadJSONFromAssetGallery();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +167,7 @@ public class ActivityProductDetail extends AppCompatActivity {
         recyclerViewDetail.setHasFixedSize(false);
         recyclerViewDetail.setNestedScrollingEnabled(false);
         recyclerViewDetail.setLayoutManager(new LinearLayoutManager(ActivityProductDetail.this, LinearLayoutManager.HORIZONTAL, false));
-        ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(ActivityProductDetail.this, R.dimen.item_offset);
+        final ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(ActivityProductDetail.this, R.dimen.item_offset);
         recyclerViewDetail.addItemDecoration(itemDecoration);
 
         text_product_name = (TextView) findViewById(R.id.text_product_title);
@@ -126,11 +184,19 @@ public class ActivityProductDetail extends AppCompatActivity {
         recycler_detail_review = (RecyclerView) findViewById(R.id.vertical_detail_review);
         edt_pincode.setFocusable(false);
 
+        //Init API
+        Retrofit retrofit =  RetrofitClient.getInstance();
+        MyapiCarrito = retrofit.create(INodeJSCarrito.class);
+
 
         // pdfa = pdfD.getText().toString();
 
 
         Button buttonpdf = (Button) findViewById(R.id.buttonpdf);
+
+        nombre =  getValueFromSharedPreferences("nombre","");
+        sucursalExistencia = getValueFromSharedPreferences("sucursal", "5df519d8cfd0fe1348d57ff9");
+        _id = getValueFromSharedPreferences("_id", "");
 
         recycler_detail_review.setHasFixedSize(false);
         recycler_detail_review.setNestedScrollingEnabled(false);
@@ -164,24 +230,87 @@ public class ActivityProductDetail extends AppCompatActivity {
         text_product_buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showOrderPlace();
+                if(!nombre.equals("") ){
+                    //si esta logeado
+                    showOrderPlace();
+
+
+                }else{
+                    //no este logeado
+                    startActivityForResult(new Intent(getApplicationContext(), ActivityLogin.class), REQUEST_CODE);
+
+
+                }
+
+               // showOrderPlace();
 
             }
+
         });
+
+
 
         text_product_cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ActivityProductDetail.this, getResources().getString(R.string.item_added_cart), Toast.LENGTH_SHORT).show();
+
+                if(!nombre.equals("") ){
+
+                    if(existenciaGlobal > 0){
+
+                        if(ArticulosAgregados > existenciaGlobal){
+                            Toast.makeText(ActivityProductDetail.this ,
+                                    "!Oops! El producto que elegiste tiene pocas unidades disponible" ,
+                                    Toast.LENGTH_SHORT).show();
+
+                        }else if(ArticulosAgregados <= existenciaGlobal){
+                            if(ShoppingCart == false){
+                                String sucursalExistenciasinComillas = sucursalExistencia.replace("\"", "");
+                                ItemCarrito carrito = new ItemCarrito(idProductoGlobal, sucursalExistenciasinComillas, 1);
+                                sendNetworkRequest(carrito);
+                            }else{
+                                if(existe == true ){
+                                    if(ArticulosAgregados + 1 > existenciaGlobal) {
+                                        Toast.makeText(ActivityProductDetail.this, "!Oops! EL producto que elegiste tiene pocas unidades"
+                                                , Toast.LENGTH_SHORT).show();
+
+
+                                    }else{
+                                        String sucursalExistenciasinComillas = sucursalExistencia.replace("\"", "");
+                                        ItemCarrito carrito = new ItemCarrito(idProductoGlobal, sucursalExistenciasinComillas,
+                                                ArticulosAgregados + 1);
+                                          updateNetworkRequest(carrito);
+                                    }
+
+                                }else{
+                                    String sucursalExistenciasinComillas = sucursalExistencia.replace("\"", "");
+                                    ItemCarrito carrito = new ItemCarrito(idProductoGlobal, sucursalExistenciasinComillas,
+                                            1);
+                                    updateNetworkRequest(carrito);
+                                }
+                            }
+
+                        }
+
+                    }else{
+                        Toast.makeText(ActivityProductDetail.this , "!Ooop! El producto que Elegiste esta Agotado", Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    //no este logeado
+
+                    startActivityForResult(new Intent(getApplicationContext(), ActivityLogin.class), REQUEST_CODE);
+
+
+
+
+                }
+
             }
         });
-
         queue= Volley.newRequestQueue(this);
-
         getIncomingIntent();
-
         loadJSONFromAssetGallery();
-
+        consultarcarrito();
 //        scrollView.setOnTouchListener(new OnSwipeTouchListener(ActivityProductDetail.this) {
 //
 //            public void onSwipeRight() {
@@ -197,6 +326,163 @@ public class ActivityProductDetail extends AppCompatActivity {
 //
 //
 //        });
+
+    }
+
+
+    //Metodo para Reagistrar Carrrito
+   /* private void insertarCarrito (final String id_usuario, final ItemCarrito productoCarrito){
+
+
+        compositeDisposable.add(MyapiCarrito.insertarCarrito(id_usuario, productoCarrito)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Consumer<String>() {
+                                    @Override
+                                    public void accept(String s) throws Exception {
+                                        Toast.makeText(ActivityProductDetail.this, "Se Creo Carrito" , Toast.LENGTH_LONG).show();
+                                    }
+                                }));
+
+
+
+    }*/
+
+   private void sendNetworkRequest(final ItemCarrito carrito){
+
+       Retrofit.Builder builder  = new Retrofit.Builder()
+               .baseUrl("http://162.214.67.53:3000/api/")
+               .addConverterFactory(GsonConverterFactory.create());
+
+       Retrofit retrofit  = builder.build();
+
+       INodeJSCarrito client = retrofit.create(INodeJSCarrito.class);
+       final String _idsincomillas = _id.replace("\"", "");
+
+       Call<ItemCarrito> call = client.insertarCarrito(_idsincomillas ,carrito);
+
+       call.enqueue(new Callback<ItemCarrito>() {
+           @Override
+           public void onResponse(Call<ItemCarrito> call, retrofit2.Response<ItemCarrito> response) {
+               Toast.makeText(ActivityProductDetail.this , "Carrito Creado" , Toast.LENGTH_LONG).show();
+               consultarcarrito();
+           }
+
+           @Override
+           public void onFailure(Call<ItemCarrito> call, Throwable t) {
+               Toast.makeText(ActivityProductDetail.this , "fallo" , Toast.LENGTH_LONG).show();
+
+
+           }
+       });
+
+   }
+
+    private void updateNetworkRequest(ItemCarrito carrito){
+
+        Retrofit.Builder builder  = new Retrofit.Builder()
+                .baseUrl("http://162.214.67.53:3000/api/")
+                .addConverterFactory(GsonConverterFactory.create());
+
+        Retrofit retrofit  = builder.build();
+
+        INodeJSCarrito client = retrofit.create(INodeJSCarrito.class);
+        String _idsincomillas = _id.replace("\"", "");
+
+        Call<ItemCarrito> call = client.agregarCarrito(_idsincomillas ,carrito);
+
+        call.enqueue(new Callback<ItemCarrito>() {
+            @Override
+            public void onResponse(Call<ItemCarrito> call, retrofit2.Response<ItemCarrito> response) {
+                Toast.makeText(ActivityProductDetail.this , "Producto Agregado" , Toast.LENGTH_LONG).show();
+                consultarcarrito();
+            }
+
+            @Override
+            public void onFailure(Call<ItemCarrito> call, Throwable t) {
+                //  Toast.makeText(ActivityProductDetail.this , "fallo" , Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+    }
+
+    public void consultarcarrito(){
+       //Metodo para consultar Carrito
+        Retrofit consultarCarrito = new Retrofit.Builder()
+                .baseUrl("http://162.214.67.53:3000/api/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        INodeJSCarrito consultarCarritoInterfas = consultarCarrito.create(INodeJSCarrito.class);
+        String _idsincomillas = _id.replace("\"", "");
+        Call<JsonObject> call = consultarCarritoInterfas.consultarCarrito(_idsincomillas);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
+
+                if(response.body() == null || response.body().get("shoppingCart").isJsonArray()){
+                    ShoppingCart = false;
+                }else{
+                    JsonArray items = response.body().get("shoppingCart").getAsJsonObject().get("items").getAsJsonArray();
+                ShoppingCart = true;
+                int index = 0;
+                for(JsonElement obj: items) {
+                    index++;
+                    JsonObject gsonObj = obj.getAsJsonObject();
+                    JsonObject gsonproducto = gsonObj.get("_id").getAsJsonObject();
+                    // String piezas = gsonObj.get("piezas").getAsString();
+                    // Toast.makeText(ActivityProductDetail.this, "" + gsonproducto, Toast.LENGTH_LONG).show();
+                    if(idProductoGlobal.equals(gsonproducto.get("_id").getAsString())) {
+                        existe = true;
+                        int piezas = gsonObj.get("piezas").getAsInt();
+                        ArticulosAgregados = piezas;
+                        indexproductocarrito = index;
+                    }
+                    //   Toast.makeText(ActivityProductDetail.this, "ok" , Toast.LENGTH_LONG).show();
+                    JsonArray items2 = gsonproducto.get("items").getAsJsonArray();
+                    // Toast.makeText(ActivityProductDetail.this , "Ok" + items2, Toast.LENGTH_LONG ).show();
+                    for(JsonElement obj2 : items2 ){
+                        JsonObject gsonobj2 = obj2.getAsJsonObject();
+                        //Toast.makeText(ActivityProductDetail.this , "Ok" + obj2, Toast.LENGTH_SHORT).show();
+                        String sucursalExistenciasincomillas = sucursalExistencia.replace("\"", "");
+                        if (sucursalExistenciasincomillas.equals(gsonobj2.get("cedis").getAsString())){
+                            existenciaGlobal = gsonobj2.get("existencia").getAsInt();
+                            //Toast.makeText(ActivityProductDetail.this, "" + gsonobj2.get("existencia").getAsInt(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }
+                }
+            }
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Toast.makeText(ActivityProductDetail.this , "fallo" , Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
+
+
+
+
+    private String getValueFromSharedPreferences(String key, String defaultValue){
+        SharedPreferences sharepref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        return sharepref.getString(key, defaultValue);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE){
+                if(resultCode == RESULT_OK){
+//                    Toast.makeText(ActivityProductDetail.this, "resultaldo ok", Toast.LENGTH_LONG).show();
+
+                }else if(resultCode == RESULT_CANCELED){
+
+  //                  Toast.makeText(ActivityProductDetail.this, "resultaldo cancel", Toast.LENGTH_LONG).show();
+
+                }
+        }
     }
 
     private void getIncomingIntent() {
@@ -213,25 +499,38 @@ public class ActivityProductDetail extends AppCompatActivity {
 
         String producto_url = "http://162.214.67.53:3000/api/obtenerProducto/"+idProductoGlobal;
 
-        JsonObjectRequest request =
+        final JsonObjectRequest request =
                 new JsonObjectRequest(Request.Method.GET, producto_url, null, new Response.Listener<JSONObject>() {
+
+
                     @Override
                     public void onResponse(JSONObject response) {
 
+
+
                         JSONObject obj = null;
                         JSONArray jsonArray = new JSONArray();
-
 
                         for (int i = 1; i < 5; i++) {
                             obj = new JSONObject();
                             try {
                                 obj.put("gallery_image", response.getJSONObject("producto").getJSONArray("img"+i).getString(1));
+
+
+                               // Toast.makeText(getApplicationContext(), ""+obj, Toast.LENGTH_LONG).show();
+
+
+
                             } catch (JSONException e) {
                                 // TODO Auto-generated catch block
                                 e.printStackTrace();
                             }
                             jsonArray.put(obj);
+
                         }
+
+
+
 
                         try {
 
@@ -245,7 +544,10 @@ public class ActivityProductDetail extends AppCompatActivity {
 
                                 //Toast.makeText(getApplicationContext(), ""+array_gallery, Toast.LENGTH_LONG).show();
 
+
+
                             }
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -253,15 +555,38 @@ public class ActivityProductDetail extends AppCompatActivity {
 
                         setAdapterGalleryList();
 
+
                         try {
 
+                            JSONArray cedis = response.getJSONObject("producto").getJSONArray("items");
+
+                           // Toast.makeText(getApplicationContext(), ""+ cedis, Toast.LENGTH_LONG).show();
+
+                            for (int indexcedis = 0; indexcedis < cedis.length(); indexcedis++){
+
+                                JSONObject cedisobject = cedis.getJSONObject(indexcedis);
+
+                                String val1 = cedisobject.getString("cedis");
+                                String sucursal = sucursalExistencia;
+                                String val2 = sucursal.replace("\"", "");
+
+                                if(val1.equals(val2)){
+
+                                    text_product_price.setText("$"+ cedisobject.getString("precio_inicial"));
+                                    existenciaGlobal = cedisobject.getInt("existencia");
+                                }
+
+                            }
+
+
                             text_product_name.setText(response.getJSONObject("producto").getString("descripcion_corta"));
-                            text_product_price.setText("$"+response.getJSONObject("producto").getString("precio_lista"));
+
+
+                            //text_product_price.setText("$"+response.getJSONObject("producto").getString("precio_lista"));
                             text_no_cost.setText("No Cost EMI");
                             text_product_rate.setText("4.8");
                             web_desc.setText(response.getJSONObject("producto").getString("dscproducto"));
                             pdfD.setText(response.getJSONObject("producto").getString("pdf"));
-
 
 
 
@@ -545,7 +870,7 @@ public class ActivityProductDetail extends AppCompatActivity {
                 itemOrderProduct.setOrderName(jo_inside.getString("order_title"));
                 itemOrderProduct.setOrderImage(jo_inside.getString("order_image"));
                 itemOrderProduct.setOrderSeller(jo_inside.getString("order_seller"));
-                itemOrderProduct.setOrderPrice(jo_inside.getString("order_price"));
+                //itemOrderProduct.setOrderPrice(jo_inside.getString("order_price"));
                 itemOrderProduct.setOrderOfferPercentage(jo_inside.getString("order_offer"));
                 itemOrderProduct.setOrderDiscountPrice(jo_inside.getString("order_discount"));
                 itemOrderProduct.setOrderDate(jo_inside.getString("order_delivery_date"));
@@ -740,4 +1065,5 @@ public class ActivityProductDetail extends AppCompatActivity {
             }
         }
     }
+
 }

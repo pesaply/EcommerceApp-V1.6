@@ -1,7 +1,10 @@
 package com.app.templateasdemo;
 
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +20,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -61,6 +65,8 @@ public class ActivityLatestList extends AppCompatActivity {
     SelectSizeAdapter adapter_size;
     RecyclerView recyclerView_color, recyclerView_size;
     LinearLayout lay_filter_click;
+
+    String sucursalExistencia;
 
     private RequestQueue queue;
 
@@ -126,7 +132,24 @@ public class ActivityLatestList extends AppCompatActivity {
         queue = Volley.newRequestQueue(this);
         loadJSONFromAssetCategoryList();
 
+        getFromSharedPreferences("sucursal","no hay");
+
+
     }
+
+    private String getFromSharedPreferences(String sucursal, String nombre){
+        SharedPreferences sharepref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+
+        Toast.makeText(ActivityLatestList.this , "ok" + sucursalExistencia, Toast.LENGTH_LONG);
+
+        return sucursalExistencia = sharepref.getString(sucursal, "5df519d8cfd0fe1348d57ff9");
+
+
+
+    }
+
+
+
 
     public ArrayList<ItemCategoryList> loadJSONFromAssetCategoryList() {
         String productos_home_url= "http://162.214.67.53:3000/api/buscarProductosPaginadoVisibles";
@@ -144,11 +167,28 @@ public class ActivityLatestList extends AppCompatActivity {
                                 JSONObject jo_inside = mJSONArray.getJSONObject(i);
                                 ItemCategoryList itemHomeCategoryList = new ItemCategoryList();
 
+                                JSONArray cedis = jo_inside.getJSONArray("items");
+
+                                for (int indexcedis = 0; indexcedis < cedis.length(); indexcedis++){
+
+                                    JSONObject cedisobject = cedis.getJSONObject(indexcedis);
+
+                                    String val1 = cedisobject.getString("cedis");
+                                    String sucursal = sucursalExistencia;
+                                    String val2 = sucursal.replace("\"", "");
+
+                                    if(val1.equals(val2)){
+
+                                        itemHomeCategoryList.setCategoryListPrice(cedisobject.getString("precio_inicial"));
+
+                                    }
+
+                                }
                                 itemHomeCategoryList.setCategoryListId(jo_inside.getString("_id"));
                                 itemHomeCategoryList.setCategoryListName(jo_inside.getString("dscproducto"));
                                 itemHomeCategoryList.setCategoryListImage(jo_inside.getJSONArray("img2").getString(1));
                                 itemHomeCategoryList.setCategoryListDescription(jo_inside.getString("cveproducto"));
-                                itemHomeCategoryList.setCategoryListPrice(jo_inside.getString("precio_lista"));
+                             //   itemHomeCategoryList.setCategoryListPrice(jo_inside.getString("precio_lista"));
 
                                 array_cat_list.add(itemHomeCategoryList);
                             }
@@ -301,4 +341,8 @@ public class ActivityLatestList extends AppCompatActivity {
         }
         return true;
     }
+
+
+
+
 }

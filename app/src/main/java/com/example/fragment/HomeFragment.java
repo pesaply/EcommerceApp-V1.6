@@ -1,6 +1,8 @@
 package com.example.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -30,6 +33,7 @@ import com.app.templateasdemo.ActivityCouponList;
 import com.app.templateasdemo.ActivityLatestList;
 import com.app.templateasdemo.ActivityProductDetail;
 import com.app.templateasdemo.ActivityTrendingList;
+import com.app.templateasdemo.MainActivity;
 import com.app.templateasdemo.R;
 import com.example.adapter.CategoryHomeAdapter;
 import com.example.adapter.CategoryListAdapter;
@@ -40,6 +44,7 @@ import com.example.item.ItemCategoryList;
 import com.example.item.ItemCoupon;
 import com.example.item.ItemHomeSlider;
 import com.example.util.ItemOffsetDecoration;
+import com.google.gson.JsonObject;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -49,6 +54,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import me.relex.circleindicator.CircleIndicator;
 
@@ -80,6 +86,10 @@ public class HomeFragment extends Fragment {
     private FragmentManager fragmentManager;
 
     private RequestQueue queue;
+
+    String sucursalExistencia;
+
+
 
     @Nullable
     @Override
@@ -134,6 +144,13 @@ public class HomeFragment extends Fragment {
         //loadJSONFromAssetHomeCoupon();
         loadJSONFromAssetHomeTrending();
 
+        getFromSharedPreferences("sucursal","no hay");
+
+      //  Toast.makeText(getActivity(), "Bienvenido: "  + sucursalExistencia, Toast.LENGTH_LONG).show();
+
+
+
+
 
 
 
@@ -174,7 +191,19 @@ public class HomeFragment extends Fragment {
         return rootView;
 
 
+
     }
+
+    private String getFromSharedPreferences(String sucursal, String nombre){
+    SharedPreferences sharepref = getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+
+        return sucursalExistencia = sharepref.getString(sucursal, "5df519d8cfd0fe1348d57ff9");
+
+        //Toast.makeText(MainActivity.this, "Bienvenido: "  + sucursalExistencia, Toast.LENGTH_LONG).show();
+
+    }
+
+
 
         public ArrayList<ItemHomeSlider> loadJSONFromAssetHomeSlider() {
         ArrayList<ItemHomeSlider> locList = new ArrayList<>();
@@ -341,6 +370,8 @@ public class HomeFragment extends Fragment {
         loadJSONFromAssetHomeLatest();
     }
 
+
+
     public ArrayList<ItemCategoryList> loadJSONFromAssetHomeLatest() {
         String productos_home_url= "http://162.214.67.53:3000/api/buscarProductosPaginadoVisibles";
 
@@ -357,15 +388,41 @@ public class HomeFragment extends Fragment {
                                 JSONObject jo_inside = mJSONArray.getJSONObject(i);
                                 ItemCategoryList itemHomeCategoryList = new ItemCategoryList();
 
+                                JSONArray cedis = jo_inside.getJSONArray("items");
+
+                                for (int indexcedis = 0; indexcedis < cedis.length(); indexcedis++){
+
+                                    JSONObject cedisobject = cedis.getJSONObject(indexcedis);
+
+                                    String val1 = cedisobject.getString("cedis");
+                                    String sucursal = sucursalExistencia;
+                                    String val2 = sucursal.replace("\"", "");
+
+                                    if(val1.equals(val2)){
+
+                                        if(cedisobject.has("precio_inicial")) {
+
+                                             itemHomeCategoryList.setCategoryListPrice(cedisobject.getString("precio_inicial"));
+                                        }
+
+                                    }
+
+                                }
+
                                 itemHomeCategoryList.setCategoryListId(jo_inside.getString("_id"));
                                 itemHomeCategoryList.setCategoryListName(jo_inside.getString("dscproducto"));
                                 itemHomeCategoryList.setCategoryListImage(jo_inside.getJSONArray("img2").getString(1));
                                 itemHomeCategoryList.setCategoryListDescription(jo_inside.getString("dscproducto"));
-                                itemHomeCategoryList.setCategoryListPrice(jo_inside.getString("precio_lista"));
+
 
                                 array_latest.add(itemHomeCategoryList);
+
                             }
+
                             setAdapterHomeCategoryList();
+
+
+//                            Toast.makeText(getContext(), "aki" + sucursal, Toast.LENGTH_SHORT).show();
 
 
                         } catch (JSONException e) {
@@ -389,6 +446,8 @@ public class HomeFragment extends Fragment {
 
         return array_latest;
     }
+
+
 
     public void setAdapterHomeCategoryList() {
 

@@ -2,6 +2,7 @@ package com.app.templateasdemo;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,12 +29,18 @@ public class SliderActivity extends AppCompatActivity {
     private Button btnSkip, btnNext;
     private MyApplication prefManager,myApplication;
 
+    private SharedPreferences prefs;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
          prefManager = new MyApplication(this);
          myApplication=MyApplication.getInstance();
+
+        prefs = getSharedPreferences("visita", Context.MODE_PRIVATE);
+
         if (!prefManager.isFirstTimeLaunch()) {
             launchHomeScreen();
             finish();
@@ -105,7 +112,24 @@ public class SliderActivity extends AppCompatActivity {
                 }
             }
         });
+
+        saveOnPreferences("true");
+
+
     }
+
+
+    private void saveOnPreferences(String visita) {
+
+
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("visita", visita);
+        editor.apply();
+
+    }
+
+
+
 
     private void addBottomDots(int currentPage) {
         dots = new TextView[layouts.length];
@@ -134,7 +158,7 @@ public class SliderActivity extends AppCompatActivity {
         if (myApplication.getTheme1()) {
             myApplication.saveTheme1(true);
             prefManager.setFirstTimeLaunch(true);
-            startActivity(new Intent(SliderActivity.this, Splash_Activity.class));
+            startActivity(new Intent(SliderActivity.this, MainActivity.class));
             finish();
         }
         if (myApplication.getTheme2()) {
@@ -221,4 +245,5 @@ public class SliderActivity extends AppCompatActivity {
             container.removeView(view);
         }
     }
+
 }

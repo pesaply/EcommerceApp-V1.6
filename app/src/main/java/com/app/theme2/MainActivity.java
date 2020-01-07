@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
                         fragmentManager.beginTransaction().replace(R.id.Container, favouriteFragment).commit();
                         return true;
 
-                    case R.id.menu_go_order:
+                    /*case R.id.menu_go_order:
                         Intent intent_order = new Intent(MainActivity.this, ActivityOrderProcessTab.class);
                         startActivity(intent_order);
                         return true;
@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
                         intent_theme.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent_theme);
 
-                        return true;
+                       return true;*/
                     default:
                         return true;
                 }
@@ -364,7 +364,7 @@ public class MainActivity extends AppCompatActivity {
                 itemOrderProduct.setOrderName(jo_inside.getString("order_title"));
                 itemOrderProduct.setOrderImage(jo_inside.getString("order_image"));
                 itemOrderProduct.setOrderSeller(jo_inside.getString("order_seller"));
-                itemOrderProduct.setOrderPrice(jo_inside.getString("order_price"));
+            //  itemOrderProduct.setOrderPrice(jo_inside.getString("order_price"));
                 itemOrderProduct.setOrderOfferPercentage(jo_inside.getString("order_offer"));
                 itemOrderProduct.setOrderDiscountPrice(jo_inside.getString("order_discount"));
                 itemOrderProduct.setOrderDate(jo_inside.getString("order_delivery_date"));

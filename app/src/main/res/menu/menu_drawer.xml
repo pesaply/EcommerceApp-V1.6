@@ -23,25 +23,9 @@
             android:title="@string/menu_favourite" />
 
         <item
-            android:id="@+id/menu_go_order"
-            android:checkable="false"
-            android:icon="@drawable/ic_order"
-            android:title="@string/menu_order" />
-        <item
-            android:id="@+id/menu_go_setting"
-            android:checkable="false"
-            android:icon="@drawable/ic_setting"
-            android:title="@string/menu_setting" />
-        <item
             android:id="@+id/menu_go_logout"
             android:checkable="false"
-            android:icon="@drawable/ic_logout"
+            android:icon="@drawable/ic_login_user"
             android:title="@string/menu_logout" />
-
-        <item
-
-            android:id="@+id/menu_go_theme"
-            android:checkable="false"
-            android:title=""/>
     </group>
 </menu>

@@ -1,7 +1,10 @@
 package com.app.templateasdemo;
 
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -63,6 +66,9 @@ public class ActivityCategoryList extends AppCompatActivity {
     SelectSizeAdapter adapter_size;
     RecyclerView recyclerView_color, recyclerView_size;
     LinearLayout lay_filter_click;
+
+
+    String sucursalExistencia;
 
     private RequestQueue queue;
     private String idCategoriaGlobal;
@@ -132,6 +138,17 @@ public class ActivityCategoryList extends AppCompatActivity {
 
         loadJSONFromAssetCategoryList();
 
+        getFromSharedPreferences("sucursal","no hay");
+
+    }
+
+    private String getFromSharedPreferences(String sucursal, String nombre){
+        SharedPreferences sharepref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+
+        return sucursalExistencia = sharepref.getString(sucursal, "5df519d8cfd0fe1348d57ff9");
+
+        //Toast.makeText(MainActivity.this, "Bienvenido: "  + sucursalExistencia, Toast.LENGTH_LONG).show();
+
     }
 
     private void getIncomingIntent() {
@@ -161,11 +178,33 @@ public class ActivityCategoryList extends AppCompatActivity {
                                 JSONObject jo_inside = mJSONArray.getJSONObject(i);
                                 ItemCategoryList itemHomeCategoryList = new ItemCategoryList();
 
+                                JSONArray cedis = jo_inside.getJSONArray("items");
+
+                                for (int indexcedis = 0; indexcedis < cedis.length(); indexcedis++){
+
+                                    JSONObject cedisobject = cedis.getJSONObject(indexcedis);
+
+                                    String val1 = cedisobject.getString("cedis");
+                                    String sucursal = sucursalExistencia;
+                                    String val2 = sucursal.replace("\"", "");
+
+                                    Toast.makeText(ActivityCategoryList.this , "ok" + sucursal ,  Toast.LENGTH_LONG).show();
+
+                                    if(val1.equals(val2)){
+
+                                        itemHomeCategoryList.setCategoryListPrice(cedisobject.getString("precio_inicial"));
+
+                                    }
+
+                                }
+
+
+
                                 itemHomeCategoryList.setCategoryListId(jo_inside.getString("_id"));
                                 itemHomeCategoryList.setCategoryListName(jo_inside.getString("dscproducto"));
                                 itemHomeCategoryList.setCategoryListImage(jo_inside.getJSONArray("img1").getString(1));
                                 itemHomeCategoryList.setCategoryListDescription(jo_inside.getString("dscproducto"));
-                                itemHomeCategoryList.setCategoryListPrice(jo_inside.getString("precio_lista"));
+                               // itemHomeCategoryList.setCategoryListPrice(jo_inside.getString("precio_lista"));
 
                                 array_cat_list.add(itemHomeCategoryList);
                             }
@@ -319,5 +358,7 @@ public class ActivityCategoryList extends AppCompatActivity {
         }
         return true;
     }
+
+
 
 }

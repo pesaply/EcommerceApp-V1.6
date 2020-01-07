@@ -451,7 +451,7 @@ public class ActivityProductDetail extends AppCompatActivity {
                 itemOrderProduct.setOrderName(jo_inside.getString("order_title"));
                 itemOrderProduct.setOrderImage(jo_inside.getString("order_image"));
                 itemOrderProduct.setOrderSeller(jo_inside.getString("order_seller"));
-                itemOrderProduct.setOrderPrice(jo_inside.getString("order_price"));
+               // itemOrderProduct.setOrderPrice(jo_inside.getString("order_price"));
                 itemOrderProduct.setOrderOfferPercentage(jo_inside.getString("order_offer"));
                 itemOrderProduct.setOrderDiscountPrice(jo_inside.getString("order_discount"));
                 itemOrderProduct.setOrderDate(jo_inside.getString("order_delivery_date"));

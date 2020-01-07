@@ -1,6 +1,5 @@
 package com.app.templateasdemo;
 
-
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -9,8 +8,12 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.PhoneNumberUtils;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -18,7 +21,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.templateasdemo.Retrofit.INodeJS;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import java.util.Calendar;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ActivityRegister extends AppCompatActivity {
 
@@ -94,30 +106,74 @@ public class ActivityRegister extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String Name = editTextName.getText().toString();
-                String LastName = editTextLastName.getText().toString();
-                String Email = editTextEmail.getText().toString();
-                String Date = mDisplayDate.getText().toString();
-                String Phone = editTextPhone.getText().toString();
+                //Metodo para consultar Usuario por Correo
+                Retrofit consultarUsuarioCorreo = new Retrofit.Builder()
+                        .baseUrl("http://162.214.67.53:3000/api/")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+                INodeJS consultarUsuarioCorreoInterfas = consultarUsuarioCorreo.create(INodeJS.class);
+                Call<JsonObject> call = consultarUsuarioCorreoInterfas.consultarUsuarioCorreo(editTextEmail.getText().toString());
+                call.enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
 
-                if (TextUtils.isEmpty(Name) || TextUtils.isEmpty(LastName) || TextUtils.isEmpty(Email) || TextUtils.isEmpty(Date) || TextUtils.isEmpty(Phone)) {
-                    Toast.makeText(ActivityRegister.this, "Ingrese todos sus datos para continuar.", Toast.LENGTH_SHORT).show();
-                } else {
+                        Boolean statusUsuario = response.body().get("status").getAsBoolean();
 
-                    Intent intent = new Intent (v.getContext(), ActivitySingup2.class);
-                    intent.putExtra("Name", Name);
-                    intent.putExtra("LastName", LastName);
-                    intent.putExtra("Email", Email);
-                    intent.putExtra("Date", Date);
-                    intent.putExtra("Phone", Phone);
-                    startActivityForResult(intent, 0);
-                    //finish();
+                        String Name = editTextName.getText().toString();
+                        String LastName = editTextLastName.getText().toString();
+                        String Email = editTextEmail.getText().toString();
+                        String Date = mDisplayDate.getText().toString();
+                        String Phone = editTextPhone.getText().toString();
 
-                }
+                        String namePattern1 = "[A-Z][a-zA-Z]\\w+|[A-Z][a-zA-Z]\\w+\\s+[A-Z][a-zA-Z]\\w+";
+                        String lastNamePattern = "[a-zA-Z]\\w+|[a-zA-Z]\\w+\\s+[a-zA-Z]\\w+";
+                        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+                        String phonePattern = "\\d{10}";
+
+                        if (TextUtils.isEmpty(Name) || TextUtils.isEmpty(LastName) || TextUtils.isEmpty(Email) || TextUtils.isEmpty(Date) || TextUtils.isEmpty(Phone)) {
+                            Toast.makeText(ActivityRegister.this, "Ingrese todos sus datos para continuar.", Toast.LENGTH_SHORT).show();
+                        } else if (!Name.matches(namePattern1)) {
+                            Toast.makeText(ActivityRegister.this, "Ingrese un nombre válido.", Toast.LENGTH_SHORT).show();
+                        } else if (!LastName.matches(lastNamePattern)) {
+                            Toast.makeText(ActivityRegister.this, "Ingrese un apellido válido.", Toast.LENGTH_SHORT).show();
+                        } else if (!Email.matches(emailPattern)) {
+                            Toast.makeText(ActivityRegister.this, "Ingrese un E-Mail válido.", Toast.LENGTH_SHORT).show();
+                        } else if (statusUsuario) {
+                            Toast.makeText(ActivityRegister.this, "Este E-Mail ya está asociado a otra cuenta.", Toast.LENGTH_SHORT).show();
+                        } else if (!Phone.matches(phonePattern)) {
+                            Toast.makeText(ActivityRegister.this, "Ingrese un Teléfono válido.", Toast.LENGTH_SHORT).show();
+                        } else {
+
+                            Intent intent = new Intent (getApplicationContext(), ActivitySingup2.class);
+                            intent.putExtra("Name", Name);
+                            intent.putExtra("LastName", LastName);
+                            intent.putExtra("Email", Email);
+                            intent.putExtra("Date", Date);
+                            intent.putExtra("Phone", Phone);
+                            startActivityForResult(intent, 0);
+                            //finish();
+
+                        }
+
+                    }
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+                    }
+                });
+
             }
         });
 
+    }
 
+    public boolean salir(int KeyCode, KeyEvent event){
+        if(KeyCode == event.KEYCODE_BACK){
+
+            Intent intent = new Intent(ActivityRegister.this, ActivityLogin.class);
+            startActivity(intent);
+
+        }
+        return super.onKeyDown(KeyCode, event);
     }
 
 }

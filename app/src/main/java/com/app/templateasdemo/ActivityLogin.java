@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +15,10 @@ import android.widget.Toast;
 
 import com.app.templateasdemo.Retrofit.INodeJS;
 import com.app.templateasdemo.Retrofit.RetrofitClient;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import org.json.JSONObject;
 
@@ -34,6 +39,8 @@ public class ActivityLogin extends AppCompatActivity {
 
     INodeJS myAPI;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
+
+
 
     Button buttonLogin,buttonSkip,buttonForgotPass,buttonRegister;
     EditText editTextEmail,editTextPass;
@@ -72,6 +79,7 @@ public class ActivityLogin extends AppCompatActivity {
         editTextEmail.setTypeface(typeface);
         editTextPass.setTypeface(typeface);
 
+            readOnPreferences();
         buttonForgotPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -134,7 +142,13 @@ public class ActivityLogin extends AppCompatActivity {
 
 
                         if (s.equals("ingresar-datos")){
-                            Toast.makeText(ActivityLogin.this, "Ingrese todos sus datos para continuar.", Toast.LENGTH_SHORT).show();
+
+                            LayoutInflater inflater = getLayoutInflater();
+                            View layout = inflater.inflate(R.layout.msj_toast, null);
+                            Toast toast = Toast.makeText(ActivityLogin.this, "Ingrese todos sus datos para continuar.", Toast.LENGTH_SHORT);
+                            toast.setView(layout);
+                            toast.show();
+
                         } else if (s.equals("mail-invalido")) {
                             Toast.makeText(ActivityLogin.this, "Introduzca un E-Mail válido.", Toast.LENGTH_SHORT).show();
                         } else if (s.equals("mail-verificar")) {
@@ -142,8 +156,23 @@ public class ActivityLogin extends AppCompatActivity {
                         } else if (s.equals("clave-verificar")) {
                             Toast.makeText(ActivityLogin.this, "Clave incorrecta, por favor verifiquela.", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(ActivityLogin.this, "Bienvenido: " + s, Toast.LENGTH_LONG).show();
-                            saveOnPreferences(correo, password);
+                            //Toast.makeText(ActivityLogin.this, "Bienvenido: "  + s , Toast.LENGTH_LONG).show();
+
+                            JsonElement jsonElement = new JsonParser().parse(s);
+
+                            JsonObject jsonObject =  jsonElement.getAsJsonObject();
+
+                            jsonObject = jsonObject.getAsJsonObject("user");
+
+                             final String nombre = jsonObject.get("nombre").toString();
+                             final String sucursal = jsonObject.get("sucursal").toString();
+                             final String _id = jsonObject.get("_id").toString();
+
+                           // Toast.makeText(ActivityLogin.this, "Bienvenido: "  + sucursal, Toast.LENGTH_LONG).show();
+
+
+
+                            saveOnPreferences(correo, password, nombre, sucursal, _id);
                             goToMain();
                         }
 
@@ -153,20 +182,37 @@ public class ActivityLogin extends AppCompatActivity {
 
     }
 
+
     private void goToMain() {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+        Intent intent = new Intent();
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+ //       startActivity(intent);
+        setResult(RESULT_OK, intent);
+
         finish();
     }
 
-    private void saveOnPreferences(String email, String password) {
+    private void saveOnPreferences(String email, String password, String nombre, String sucursal, String _id) {
 
 
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("email", email);
             editor.putString("pass", password);
+            editor.putString("nombre",nombre);
+            editor.putString("sucursal", sucursal);
+            editor.putString("_id", _id);
             editor.apply();
+
+    }
+
+    private void readOnPreferences(){
+        SharedPreferences preferences =  getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+
+        String  email = preferences.getString("email", "");
+        String pass = preferences.getString("pass", "");
+
+        editTextEmail.setText(email);
+        editTextPass.setText(pass);
 
     }
 

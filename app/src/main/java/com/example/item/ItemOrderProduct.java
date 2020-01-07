@@ -6,11 +6,21 @@ public class ItemOrderProduct {
     private String OrderName;
     private String OrderImage;
     private String OrderSeller;
-    private String OrderPrice;
+    private int OrderPrice;
     private String OrderOfferPercentage;
     private String OrderDiscountPrice;
     private String OrderDate;
     private int OrderQuantity;
+
+    public String getIdproducto() {
+        return idproducto;
+    }
+
+    public void setIdproducto(String idproducto) {
+        this.idproducto = idproducto;
+    }
+
+    private String idproducto;
 
     public String getOrderName() {
         return OrderName;
@@ -31,8 +41,8 @@ public class ItemOrderProduct {
         this.OrderImage = OrderImage;
     }
 
-    public String getOrderPrice() {return OrderPrice;}
-    public void setOrderPrice(String OrderPrice) {this.OrderPrice = OrderPrice;}
+    public int getOrderPrice() {return OrderPrice;}
+    public void setOrderPrice(int OrderPrice) {this.OrderPrice = OrderPrice;}
 
     public String getOrderOfferPercentage() {return OrderOfferPercentage;}
     public void setOrderOfferPercentage(String OrderOfferPercentage) {

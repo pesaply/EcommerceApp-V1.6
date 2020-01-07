@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".ActivityTipoEntrega">
+
+    <include
+        android:id="@+id/toolbar_main"
+        layout="@layout/row_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        |<TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25dp"
+            android:text="Seleccion Tipo de Entrega"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="20dp"/>
+
+        <Button
+            android:id="@+id/entregasucursal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sucursal"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="30dp"
+            />
+
+        <Button
+            android:id="@+id/entregadomicilio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Domicilio"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="30dp"
+            />
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

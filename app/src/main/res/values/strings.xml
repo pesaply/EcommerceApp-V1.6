@@ -67,6 +67,11 @@
     <!--left navigation drawer-->
     <string name="menu_home">Home</string>
     <string name="menu_category">Categoría</string>
+    <string name="mi_perfil">Mi Perfil</string>
+    <string name="tipo_entrega">Tipo Entrega</string>
+    <string name="Entrega_Domicilio">Entrega a Domicilio</string>
+    <string name="tipo_pedido">Tipo Pedido</string>
+    <string name="pedido_programado">Pedido Programado</string>
     <string name="menu_favourite">Favoritos</string>
     <string name="menu_gift_card">Gift Cards</string>
     <string name="menu_refer">Refer &amp; Earn</string>
@@ -99,11 +104,11 @@
     <string name="product_color">Colour</string>
     <string name="product_price">Precio</string>
     <string name="product_size">Size</string>
-    <string name="my_cart">My Cart</string>
+    <string name="my_cart">Mi Carrito</string>
     <string name="change_pin">Change</string>
-    <string name="con_shopping">Shopping</string>
-    <string name="place_order">Place Order</string>
-    <string name="total_item">Total :- </string>
+    <string name="con_shopping">Seguir Comprando</string>
+    <string name="place_order">Ordenar</string>
+    <string name="total_item">Total : </string>
     <string name="remove_item">Remove</string>
     <string name="item_added_cart">Item added to cart</string>
     <string name="apply">Apply</string>
@@ -121,7 +126,7 @@
     <string name="congratulation_title">Congratulation</string>
     <string name="congratulation_msg">We will send you an email  just your order will be shipped.</string>
     <string name="congratulation_ok">OKAY</string>
-    <string name="seller">Seller:-</string>
+    <string name="seller">Clave: </string>
     <string name="delivery">Delivery By:-</string>
 
     <string name="stage_address">Address</string>
@@ -190,4 +195,5 @@
 
     <string name="email_conform">Order confirmation email will be send to</string>
     <string name="email_user">info@viaviweb.com</string>
+    <string name="title_activity_tipo_enterga">ActivityTipoEnterga</string>
 </resources>

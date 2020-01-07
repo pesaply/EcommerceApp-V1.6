@@ -17,7 +17,7 @@
                 android:layout_width="@dimen/img_width_height"
                 android:layout_height="@dimen/img_width_height"
                 android:src="@drawable/logo_siscom01"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="30dp"
                 android:layout_gravity="center"
                 android:layout_centerHorizontal="true"
                 android:foregroundGravity="center_horizontal"/>
@@ -119,39 +119,7 @@
                     </LinearLayout>
 
                 </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_gravity="center"
-                        android:orientation="horizontal">
-
-                        <CheckBox
-                            android:id="@+id/toggle_on_off"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:button="@drawable/checkbox_selector" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="35dp"
-                            android:layout_marginRight="3dp"
-                            android:layout_weight="2.5"
-                            android:layout_marginLeft="5dp"
-                            android:gravity="center_vertical"
-                            android:text="@string/remember"
-                            android:textColor="@color/white"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

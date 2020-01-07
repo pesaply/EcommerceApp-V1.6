@@ -32,4 +32,6 @@ public class ItemCategoryList {
     public void setCategoryListPrice(String CategoryListPrice) {
         this.CategoryListPrice = CategoryListPrice;}
 
+
+
 }

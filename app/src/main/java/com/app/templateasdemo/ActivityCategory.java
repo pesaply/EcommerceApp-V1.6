@@ -1,7 +1,13 @@
 package com.app.templateasdemo;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -45,34 +51,35 @@ public class ActivityCategory extends AppCompatActivity {
 
      @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_category);
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.menu_category));
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_category);
+         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+         toolbar.setTitle(getString(R.string.menu_category));
+         setSupportActionBar(toolbar);
+         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        mListItem = new ArrayList<>();
-        AdView mAdView = (AdView) findViewById(R.id.adView);
-        mAdView.loadAd(new AdRequest.Builder().build());
+         mListItem = new ArrayList<>();
+         AdView mAdView = (AdView) findViewById(R.id.adView);
+         mAdView.loadAd(new AdRequest.Builder().build());
 
-        lyt_not_found = (LinearLayout) findViewById(R.id.lyt_not_found);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        recyclerView = (RecyclerView) findViewById(R.id.vertical_courses_list);
-
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(ActivityCategory.this, 1));
-        ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(ActivityCategory.this, R.dimen.item_offset);
-        recyclerView.addItemDecoration(itemDecoration);
+         lyt_not_found = (LinearLayout) findViewById(R.id.lyt_not_found);
+         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+         recyclerView = (RecyclerView) findViewById(R.id.vertical_courses_list);
 
 
-        queue= Volley.newRequestQueue(this);
+         recyclerView.setHasFixedSize(true);
+         recyclerView.setLayoutManager(new GridLayoutManager(ActivityCategory.this, 1));
+         ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(ActivityCategory.this, R.dimen.item_offset);
+         recyclerView.addItemDecoration(itemDecoration);
 
-        loadJSONFromAssetHomeCategory();
 
-    }
+         queue = Volley.newRequestQueue(this);
 
+         loadJSONFromAssetHomeCategory();
+
+
+     }
     public ArrayList<ItemCategory> loadJSONFromAssetHomeCategory() {
 
         String categorias_url = "http://162.214.67.53:3000/api/obtenerCategoriasVisibles";
