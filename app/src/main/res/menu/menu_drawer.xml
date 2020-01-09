@@ -19,8 +19,8 @@
         <item
             android:id="@+id/menu_go_favourite"
             android:checked="false"
-            android:icon="@drawable/ic_favourite"
-            android:title="@string/menu_favourite" />
+            android:icon="@drawable/historialpedidos"
+            android:title="@string/pedidos" />
 
         <item
             android:id="@+id/menu_go_logout"

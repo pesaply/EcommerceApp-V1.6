@@ -56,7 +56,7 @@
                 android:text=""
                 android:textColor="@color/white" />
 
-            <com.github.ornolfr.ratingview.RatingView
+       <!--     <com.github.ornolfr.ratingview.RatingView
                 android:id="@+id/rating_home_slider"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
                 card_view:drawable_margin="2dp"
                 card_view:drawable_size="20dp"
                 card_view:is_indicator="true"
-                card_view:max_count="5" />
+                card_view:max_count="5" /> -->
         </LinearLayout>
 
 

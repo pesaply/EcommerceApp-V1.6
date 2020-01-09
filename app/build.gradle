@@ -94,4 +94,7 @@ dependencies {
 
 
     implementation 'com.github.lzyzsd:Circleprogress:1.2.1'
+    implementation 'android.arch.lifecycle:extensions:1.1.1'
+
+
 }

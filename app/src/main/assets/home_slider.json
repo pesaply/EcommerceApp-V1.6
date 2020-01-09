@@ -4,22 +4,17 @@
    {
       "title":"Fashion sale",
       "description":"Fashion sale upto 50% off on all product",
-      "image":"banner1.png"
+      "image":"web1.jpg"
    },
    {
       "title":"Furniture sale",
       "description":"Furniture sale in all item",
-      "image":"banner2.jpg"
+      "image":"web2.jpg"
    },
    {
       "title":"Used Furniture for Sale",
       "description":"Used Furniture for Sale in all item",
-      "image":"banner3.jpg"
-   },
-   {
-      "title":"Electronics sale",
-      "description":"Electronics sale in all product",
-      "image":"banner4.jpg"
+      "image":"web4.jpg"
    }
 ]
 }

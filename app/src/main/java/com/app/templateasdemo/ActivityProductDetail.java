@@ -259,9 +259,11 @@ public class ActivityProductDetail extends AppCompatActivity {
                     if(existenciaGlobal > 0){
 
                         if(ArticulosAgregados > existenciaGlobal){
-                            Toast.makeText(ActivityProductDetail.this ,
-                                    "!Oops! El producto que elegiste tiene pocas unidades disponible" ,
-                                    Toast.LENGTH_SHORT).show();
+                            LayoutInflater inflater = getLayoutInflater();
+                            View layout = inflater.inflate(R.layout.msj_pocas_uni_dispo, null);
+                            Toast toast = Toast.makeText(ActivityProductDetail.this, "", Toast.LENGTH_SHORT);
+                            toast.setView(layout);
+                            toast.show();
 
                         }else if(ArticulosAgregados <= existenciaGlobal){
                             if(ShoppingCart == false){
@@ -271,10 +273,11 @@ public class ActivityProductDetail extends AppCompatActivity {
                             }else{
                                 if(existe == true ){
                                     if(ArticulosAgregados + 1 > existenciaGlobal) {
-                                        Toast.makeText(ActivityProductDetail.this, "!Oops! EL producto que elegiste tiene pocas unidades"
-                                                , Toast.LENGTH_SHORT).show();
-
-
+                                        LayoutInflater inflater = getLayoutInflater();
+                                        View layout = inflater.inflate(R.layout.msj_pocas_unidades, null);
+                                        Toast toast = Toast.makeText(ActivityProductDetail.this, "", Toast.LENGTH_SHORT);
+                                        toast.setView(layout);
+                                        toast.show();
                                     }else{
                                         String sucursalExistenciasinComillas = sucursalExistencia.replace("\"", "");
                                         ItemCarrito carrito = new ItemCarrito(idProductoGlobal, sucursalExistenciasinComillas,
@@ -293,7 +296,11 @@ public class ActivityProductDetail extends AppCompatActivity {
                         }
 
                     }else{
-                        Toast.makeText(ActivityProductDetail.this , "!Ooop! El producto que Elegiste esta Agotado", Toast.LENGTH_SHORT).show();
+                        LayoutInflater inflater = getLayoutInflater();
+                        View layout = inflater.inflate(R.layout.msj_producto_agotado, null);
+                        Toast toast = Toast.makeText(ActivityProductDetail.this, "", Toast.LENGTH_SHORT);
+                        toast.setView(layout);
+                        toast.show();
                     }
                 }else{
                     //no este logeado
@@ -364,7 +371,12 @@ public class ActivityProductDetail extends AppCompatActivity {
        call.enqueue(new Callback<ItemCarrito>() {
            @Override
            public void onResponse(Call<ItemCarrito> call, retrofit2.Response<ItemCarrito> response) {
-               Toast.makeText(ActivityProductDetail.this , "Carrito Creado" , Toast.LENGTH_LONG).show();
+
+               LayoutInflater inflater = getLayoutInflater();
+               View layout = inflater.inflate(R.layout.msj_carrito_creado, null);
+               Toast toast = Toast.makeText(ActivityProductDetail.this, "", Toast.LENGTH_SHORT);
+               toast.setView(layout);
+               toast.show();
                consultarcarrito();
            }
 
@@ -394,7 +406,11 @@ public class ActivityProductDetail extends AppCompatActivity {
         call.enqueue(new Callback<ItemCarrito>() {
             @Override
             public void onResponse(Call<ItemCarrito> call, retrofit2.Response<ItemCarrito> response) {
-                Toast.makeText(ActivityProductDetail.this , "Producto Agregado" , Toast.LENGTH_LONG).show();
+                LayoutInflater inflater = getLayoutInflater();
+                View layout = inflater.inflate(R.layout.msj_producto_agregado, null);
+                Toast toast = Toast.makeText(ActivityProductDetail.this, "", Toast.LENGTH_SHORT);
+                toast.setView(layout);
+                toast.show();
                 consultarcarrito();
             }
 

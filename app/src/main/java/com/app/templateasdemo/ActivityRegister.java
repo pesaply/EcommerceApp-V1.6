@@ -1,19 +1,16 @@
 package com.app.templateasdemo;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.telephony.PhoneNumberUtils;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -22,7 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.templateasdemo.Retrofit.INodeJS;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.Calendar;
@@ -125,25 +121,60 @@ public class ActivityRegister extends AppCompatActivity {
                         String Date = mDisplayDate.getText().toString();
                         String Phone = editTextPhone.getText().toString();
 
-                        String namePattern1 = "[A-Z][a-zA-Z]\\w+|[A-Z][a-zA-Z]\\w+\\s+[A-Z][a-zA-Z]\\w+";
-                        String lastNamePattern = "[a-zA-Z]\\w+|[a-zA-Z]\\w+\\s+[a-zA-Z]\\w+";
+                        String namePattern1 = "[A-zÀ-ú ]+";
+                        String lastNamePattern = "[A-zÀ-ú ]+";
                         String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
                         String phonePattern = "\\d{10}";
 
                         if (TextUtils.isEmpty(Name) || TextUtils.isEmpty(LastName) || TextUtils.isEmpty(Email) || TextUtils.isEmpty(Date) || TextUtils.isEmpty(Phone)) {
-                            Toast.makeText(ActivityRegister.this, "Ingrese todos sus datos para continuar.", Toast.LENGTH_SHORT).show();
-                        } else if (!Name.matches(namePattern1)) {
-                            Toast.makeText(ActivityRegister.this, "Ingrese un nombre válido.", Toast.LENGTH_SHORT).show();
-                        } else if (!LastName.matches(lastNamePattern)) {
-                            Toast.makeText(ActivityRegister.this, "Ingrese un apellido válido.", Toast.LENGTH_SHORT).show();
+                            LayoutInflater inflater = getLayoutInflater();
+                            View layout = inflater.inflate(R.layout.msj_ingrese_todos_datos, null);
+                            Toast toast = Toast.makeText(ActivityRegister.this, "", Toast.LENGTH_SHORT);
+                            toast.setView(layout);
+                            toast.show();
+                        } else if (!Name.trim().matches(namePattern1)) {
+                            LayoutInflater inflater = getLayoutInflater();
+                            View layout = inflater.inflate(R.layout.msj_nombre_valido, null);
+                            Toast toast = Toast.makeText(ActivityRegister.this, "", Toast.LENGTH_SHORT);
+                            toast.setView(layout);
+                            toast.show();
+                        } else if (Name.trim().length() < 3) {
+                            LayoutInflater inflater = getLayoutInflater();
+                            View layout = inflater.inflate(R.layout.msj_nombre_caracte, null);
+                            Toast toast = Toast.makeText(ActivityRegister.this, "", Toast.LENGTH_SHORT);
+                            toast.setView(layout);
+                            toast.show();
+                        } else if (!LastName.trim().matches(lastNamePattern)) {
+                            LayoutInflater inflater = getLayoutInflater();
+                            View layout = inflater.inflate(R.layout.msj_apellido_valido, null);
+                            Toast toast = Toast.makeText(ActivityRegister.this, "", Toast.LENGTH_SHORT);
+                            toast.setView(layout);
+                            toast.show();
+                        } else if (LastName.trim().length() < 3) {
+                            LayoutInflater inflater = getLayoutInflater();
+                            View layout = inflater.inflate(R.layout.msj_apellido_carac, null);
+                            Toast toast = Toast.makeText(ActivityRegister.this, "", Toast.LENGTH_SHORT);
+                            toast.setView(layout);
+                            toast.show();
                         } else if (!Email.matches(emailPattern)) {
-                            Toast.makeText(ActivityRegister.this, "Ingrese un E-Mail válido.", Toast.LENGTH_SHORT).show();
+                            LayoutInflater inflater = getLayoutInflater();
+                            View layout = inflater.inflate(R.layout.msj_email_valido, null);
+                            Toast toast = Toast.makeText(ActivityRegister.this, "", Toast.LENGTH_SHORT);
+                            toast.setView(layout);
+                            toast.show();
                         } else if (statusUsuario) {
-                            Toast.makeText(ActivityRegister.this, "Este E-Mail ya está asociado a otra cuenta.", Toast.LENGTH_SHORT).show();
+                            LayoutInflater inflater = getLayoutInflater();
+                            View layout = inflater.inflate(R.layout.msj_email_otra_cuenta, null);
+                            Toast toast = Toast.makeText(ActivityRegister.this, "", Toast.LENGTH_SHORT);
+                            toast.setView(layout);
+                            toast.show();
                         } else if (!Phone.matches(phonePattern)) {
-                            Toast.makeText(ActivityRegister.this, "Ingrese un Teléfono válido.", Toast.LENGTH_SHORT).show();
+                            LayoutInflater inflater = getLayoutInflater();
+                            View layout = inflater.inflate(R.layout.msj_telefono_valido, null);
+                            Toast toast = Toast.makeText(ActivityRegister.this, "", Toast.LENGTH_SHORT);
+                            toast.setView(layout);
+                            toast.show();
                         } else {
-
                             Intent intent = new Intent (getApplicationContext(), ActivitySingup2.class);
                             intent.putExtra("Name", Name);
                             intent.putExtra("LastName", LastName);

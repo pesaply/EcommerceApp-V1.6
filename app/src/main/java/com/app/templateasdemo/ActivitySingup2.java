@@ -1,11 +1,13 @@
 package com.app.templateasdemo;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -163,7 +165,11 @@ public class ActivitySingup2 extends AppCompatActivity{
                 String School = editTextSchool.getText().toString();
 
                 if (spinnerSucursal.getSelectedItemPosition() == 0) {
-                    Toast.makeText(ActivitySingup2.this, "Seleccione una sucursal para continuar.", Toast.LENGTH_SHORT).show();
+                    LayoutInflater inflater = getLayoutInflater();
+                    View layout = inflater.inflate(R.layout.msj_seleccione_sucursal, null);
+                    Toast toast = Toast.makeText(ActivitySingup2.this, "", Toast.LENGTH_SHORT);
+                    toast.setView(layout);
+                    toast.show();
                 } else {
                     Intent intent = new Intent (v.getContext(), ActivitySingup3.class);
                     intent.putExtra("Name", Name);

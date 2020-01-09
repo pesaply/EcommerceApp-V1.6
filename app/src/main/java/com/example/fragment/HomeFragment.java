@@ -208,7 +208,7 @@ public class HomeFragment extends Fragment {
         public ArrayList<ItemHomeSlider> loadJSONFromAssetHomeSlider() {
         ArrayList<ItemHomeSlider> locList = new ArrayList<>();
         String json = null;
-       /*try {
+       try {
             InputStream is = getActivity().getAssets().open("home_slider.json");
             int size = is.available();
             byte[] buffer = new byte[size];
@@ -227,15 +227,15 @@ public class HomeFragment extends Fragment {
                 JSONObject jo_inside = m_jArry.getJSONObject(i);
                 ItemHomeSlider itemHomeSlider = new ItemHomeSlider();
 
-                itemHomeSlider.setHomeSliderName(jo_inside.getString("title"));
-                itemHomeSlider.setHomeSliderDescription(jo_inside.getString("description"));
+                //itemHomeSlider.setHomeSliderName(jo_inside.getString("title"));
+                //itemHomeSlider.setHomeSliderDescription(jo_inside.getString("description"));
                 itemHomeSlider.setHomeSliderImage(jo_inside.getString("image"));
 
                 array_Slider.add(itemHomeSlider);
             }
         } catch (JSONException e) {
             e.printStackTrace();
-        }*/
+        }
         setAdapter();
         return array_Slider;
 
@@ -304,13 +304,13 @@ public class HomeFragment extends Fragment {
             text_title.setText(itemSlider.getHomeSliderName());
             txt_description.setText(itemSlider.getHomeSliderDescription());
 
-            //Picasso.with(getActivity()).load("file:///android_asset/image/" + itemSlider.getHomeSliderImage()).placeholder(R.drawable.placeholder320).into(image_slider);
+            Picasso.get().load("file:///android_asset/image/" + itemSlider.getHomeSliderImage()).placeholder(R.drawable.placeholder320).into(image_slider);
 
             image_slider.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent_detail=new Intent(getActivity(), ActivityProductDetail.class);
-                    startActivity(intent_detail);
+                   // Intent intent_detail=new Intent(getActivity(), ActivityProductDetail.class);
+                   // startActivity(intent_detail);
                 }
             });
 
@@ -326,38 +326,47 @@ public class HomeFragment extends Fragment {
     }
 
     public ArrayList<ItemCategory> loadJSONFromAssetHomeCategory() {
-       ArrayList<ItemCategory> locList = new ArrayList<>();
-        String json = null;
-        try {
-            InputStream is = getActivity().getAssets().open("category.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        try {
-            JSONObject obj = new JSONObject(json);
-            JSONArray m_jArry = obj.getJSONArray("EcommerceApp");
+        String categorias_url = "http://162.214.67.53:3000/api/obtenerCategoriasVisibles";
 
-            for (int i = 0; i < m_jArry.length(); i++) {
-                JSONObject jo_inside = m_jArry.getJSONObject(i);
-                ItemCategory itemHomeCategory = new ItemCategory();
+        JsonObjectRequest request =
+                new JsonObjectRequest(Request.Method.GET, categorias_url, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
 
-                itemHomeCategory.setCategoryName(jo_inside.getString("cat_title"));
-                itemHomeCategory.setCategoryImage(jo_inside.getString("cat_image"));
-                itemHomeCategory.setCategoryImageBanner(jo_inside.getString("cat_image_banner"));
-                itemHomeCategory.setCategoryNoItem(jo_inside.getString("cat_item_no"));
+                        try {
+                            //Asignando el JSONArray
+                            JSONArray mJSONArray=response.getJSONArray("categorias");
 
-                array_category.add(itemHomeCategory);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        setAdapterHomeCategory();
+                            for (int i = 0; i < mJSONArray.length(); i++) {
+                                JSONObject jo_inside = mJSONArray.getJSONObject(i);
+                                ItemCategory itemHomeCategory = new ItemCategory();
+
+                                itemHomeCategory.setCategoryId(jo_inside.getString("_id"));
+                                itemHomeCategory.setCategoryName(jo_inside.getString("nombre_categoria"));
+                                itemHomeCategory.setCategoryImage(jo_inside.getJSONArray("img").getString(1));
+                                itemHomeCategory.setCategoryImageBanner(jo_inside.getJSONArray("img").getString(0));
+
+                                array_category.add(itemHomeCategory);
+                            }
+
+                            setAdapterHomeCategory();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+
+        //agregando request
+        queue.add(request);
+
+
         return array_category;
 
     }
@@ -395,7 +404,7 @@ public class HomeFragment extends Fragment {
                                     JSONObject cedisobject = cedis.getJSONObject(indexcedis);
 
                                     String val1 = cedisobject.getString("cedis");
-                                    String sucursal = sucursalExistencia;
+                                    String sucursal = "5df519d8cfd0fe1348d57ff9";
                                     String val2 = sucursal.replace("\"", "");
 
                                     if(val1.equals(val2)){
@@ -411,7 +420,7 @@ public class HomeFragment extends Fragment {
 
                                 itemHomeCategoryList.setCategoryListId(jo_inside.getString("_id"));
                                 itemHomeCategoryList.setCategoryListName(jo_inside.getString("dscproducto"));
-                                itemHomeCategoryList.setCategoryListImage(jo_inside.getJSONArray("img2").getString(1));
+                                itemHomeCategoryList.setCategoryListImage(jo_inside.getJSONArray("img1").getString(1));
                                 itemHomeCategoryList.setCategoryListDescription(jo_inside.getString("dscproducto"));
 
 

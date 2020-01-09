@@ -15,22 +15,14 @@ import android.widget.Toast;
 
 import com.app.templateasdemo.Retrofit.INodeJS;
 import com.app.templateasdemo.Retrofit.RetrofitClient;
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
-import org.json.JSONObject;
-
-import java.util.regex.Pattern;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class ActivityLogin extends AppCompatActivity {
@@ -142,19 +134,29 @@ public class ActivityLogin extends AppCompatActivity {
 
 
                         if (s.equals("ingresar-datos")){
-
                             LayoutInflater inflater = getLayoutInflater();
-                            View layout = inflater.inflate(R.layout.msj_toast, null);
-                            Toast toast = Toast.makeText(ActivityLogin.this, "Ingrese todos sus datos para continuar.", Toast.LENGTH_SHORT);
+                            View layout = inflater.inflate(R.layout.msj_ingrese_todos_datos, null);
+                            Toast toast = Toast.makeText(ActivityLogin.this, "", Toast.LENGTH_SHORT);
                             toast.setView(layout);
                             toast.show();
-
                         } else if (s.equals("mail-invalido")) {
-                            Toast.makeText(ActivityLogin.this, "Introduzca un E-Mail válido.", Toast.LENGTH_SHORT).show();
+                            LayoutInflater inflater = getLayoutInflater();
+                            View layout = inflater.inflate(R.layout.msj_email_valido, null);
+                            Toast toast = Toast.makeText(ActivityLogin.this, "", Toast.LENGTH_SHORT);
+                            toast.setView(layout);
+                            toast.show();
                         } else if (s.equals("mail-verificar")) {
-                            Toast.makeText(ActivityLogin.this, "E-Mail incorrecto, por favor verifiquelo.", Toast.LENGTH_SHORT).show();
+                            LayoutInflater inflater = getLayoutInflater();
+                            View layout = inflater.inflate(R.layout.msj3_toast, null);
+                            Toast toast = Toast.makeText(ActivityLogin.this, "", Toast.LENGTH_SHORT);
+                            toast.setView(layout);
+                            toast.show();
                         } else if (s.equals("clave-verificar")) {
-                            Toast.makeText(ActivityLogin.this, "Clave incorrecta, por favor verifiquela.", Toast.LENGTH_SHORT).show();
+                            LayoutInflater inflater = getLayoutInflater();
+                            View layout = inflater.inflate(R.layout.msj4_toast, null);
+                            Toast toast = Toast.makeText(ActivityLogin.this, "", Toast.LENGTH_SHORT);
+                            toast.setView(layout);
+                            toast.show();
                         } else {
                             //Toast.makeText(ActivityLogin.this, "Bienvenido: "  + s , Toast.LENGTH_LONG).show();
 

@@ -90,8 +90,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         minicarrito();
-
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,10 +154,16 @@ public class MainActivity extends AppCompatActivity {
                         return true;
 
                     case R.id.menu_go_favourite:
-                        toolbar.setTitle(getString(R.string.menu_favourite));
+
+                        Intent intent_pedidos = new Intent(MainActivity.this , ActivityHistorialPedidos.class);
+                        startActivity(intent_pedidos);
+                        return true;
+
+
+                        /*toolbar.setTitle(getString(R.string.pedidos));
                         FavoriteFragment favouriteFragment = new FavoriteFragment();
                         fragmentManager.beginTransaction().replace(R.id.Container, favouriteFragment).commit();
-                        return true;
+                        return true;*/
 
                     /*case R.id.menu_go_order:
                         Intent intent_order=new Intent(MainActivity.this,ActivityOrderProcess.class);
@@ -440,7 +446,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-          CheckBox checkBox  = (CheckBox) mDialogPlaceOrder.findViewById(R.id.chboxecuela);
+        chbox_escuela = (CheckBox) mDialogPlaceOrder.findViewById(R.id.chboxecuela);
         txtescuela = (TextView) mDialogPlaceOrder.findViewById(R.id.txtescuela);
 
 

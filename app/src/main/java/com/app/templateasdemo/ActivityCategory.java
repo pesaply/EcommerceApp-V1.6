@@ -169,17 +169,27 @@ public class ActivityCategory extends AppCompatActivity {
         });
         return super.onCreateOptionsMenu(menu);
     }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                break;
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; go home
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                return true;
             default:
-                return super.onOptionsItemSelected(menuItem);
+                return super.onOptionsItemSelected(item);
         }
-        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(ActivityCategory.this,MainActivity.class);
+        intent.addFlags((Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        startActivity(intent);
+        super.onBackPressed();
     }
 
 }

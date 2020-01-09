@@ -4,6 +4,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -69,7 +70,11 @@ public class ActivitySingup3 extends ActivityPayment {
                 String confirmPassword = editTextConfirmPassword.getText().toString();
 
                 if (TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword)) {
-                    Toast.makeText(ActivitySingup3.this, "Ingrese todos sus datos para continuar.", Toast.LENGTH_LONG).show();
+                    LayoutInflater inflater = getLayoutInflater();
+                    View layout = inflater.inflate(R.layout.msj_ingrese_todos_datos, null);
+                    Toast toast = Toast.makeText(ActivitySingup3.this, "", Toast.LENGTH_SHORT);
+                    toast.setView(layout);
+                    toast.show();
                 } else {
 
                     registerUser(Name, LastName, Email, Date, Phone, School, Sucursal,
@@ -101,11 +106,23 @@ public class ActivitySingup3 extends ActivityPayment {
                         } else if (s.equals("validacion-cp")) {
                             Toast.makeText(ActivitySingup3.this, "El código postal debe contener 5 dígitos.", Toast.LENGTH_SHORT).show();
                         } else if (s.equals("validacion-password")) {
-                            Toast.makeText(ActivitySingup3.this, "La clave debe tener entre 8-16 caracteres, al menos un dígito, al menos una minúscula y al menos una mayúscula. Puede tener otros símbolos.", Toast.LENGTH_SHORT).show();
+                            LayoutInflater inflater = getLayoutInflater();
+                            View layout = inflater.inflate(R.layout.msj_clave, null);
+                            Toast toast = Toast.makeText(ActivitySingup3.this, "", Toast.LENGTH_SHORT);
+                            toast.setView(layout);
+                            toast.show();
                         } else if (s.equals("validacion-confirm-password")) {
-                            Toast.makeText(ActivitySingup3.this, "Las claves no coinciden.", Toast.LENGTH_SHORT).show();
+                            LayoutInflater inflater = getLayoutInflater();
+                            View layout = inflater.inflate(R.layout.msj_claves_no_coinciden, null);
+                            Toast toast = Toast.makeText(ActivitySingup3.this, "", Toast.LENGTH_SHORT);
+                            toast.setView(layout);
+                            toast.show();
                         } else {
-                            Toast.makeText(ActivitySingup3.this, "Registrado: " + s, Toast.LENGTH_LONG).show();
+                            LayoutInflater inflater = getLayoutInflater();
+                            View layout = inflater.inflate(R.layout.msj_registrado, null);
+                            Toast toast = Toast.makeText(ActivitySingup3.this, ""+ s, Toast.LENGTH_LONG);
+                            toast.setView(layout);
+                            toast.show();
                             goToMain();
                         }
 
@@ -116,7 +133,7 @@ public class ActivitySingup3 extends ActivityPayment {
     }
 
     private void goToMain() {
-        Intent intent = new Intent(this, ActivityLogin.class);
+        Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();

@@ -83,6 +83,7 @@
     <string name="no_item_found">No Item Found</string>
     <string name="notification">Notificationes</string>
     <string name="no_notification">No Notification</string>
+    <string name="pedidos">Pedidos</string>
 
     <string name="home_category">Navegar por Categoria</string>
     <string name="home_latest">Productos</string>
@@ -196,4 +197,7 @@
     <string name="email_conform">Order confirmation email will be send to</string>
     <string name="email_user">info@viaviweb.com</string>
     <string name="title_activity_tipo_enterga">ActivityTipoEnterga</string>
+    <string name="title_activity_pedidos1">ActivityPedidos1</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
 </resources>
