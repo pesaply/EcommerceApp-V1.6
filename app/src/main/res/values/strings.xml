@@ -68,7 +68,6 @@
     <string name="menu_home">Home</string>
     <string name="menu_category">Categoría</string>
     <string name="mi_perfil">Mi Perfil</string>
-    <string name="tipo_entrega">Tipo Entrega</string>
     <string name="Entrega_Domicilio">Entrega a Domicilio</string>
     <string name="tipo_pedido">Tipo Pedido</string>
     <string name="pedido_programado">Pedido Programado</string>
@@ -193,6 +192,8 @@
     <string name="theme2_stage_address">Delivery Address</string>
     <string name="theme2_stage_deliver">Delivery Order</string>
     <string name="theme2_stage_cancel">Order Canceled</string>
+    <string name="en_proceso">En Proceso</string>
+    <string name="historial">Historial</string>
 
     <string name="email_conform">Order confirmation email will be send to</string>
     <string name="email_user">info@viaviweb.com</string>
@@ -200,4 +201,16 @@
     <string name="title_activity_pedidos1">ActivityPedidos1</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
+
+    <!--Cart-->
+    <string name="cart">Carrito</string>
+    <string name="tipo_entrega">Tipo de entrega</string>
+    <string name="resumen_pedido">Resumen de pedido</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="descuento">Descuento</string>
+    <string name="total">Total</string>
+    <string name="button_undo">Deshacer</string>
+    <string name="forma_pago">Forma de pago</string>
+
+
 </resources>

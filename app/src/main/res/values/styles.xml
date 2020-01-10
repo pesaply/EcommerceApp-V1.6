@@ -36,7 +36,6 @@
         <item name="colorAccent">@color/colorPrimary_green</item>
     </style>
 
-
     <style name="AppTheme_green" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
@@ -54,6 +53,11 @@
         <item name="android:textSize">10dp</item>
         <item name="android:textColor">@android:color/black</item>
         <item name="android:layout_marginLeft">12dp</item>
+    </style>
+
+    <style name="tab2">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

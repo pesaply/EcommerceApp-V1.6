@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -32,6 +33,8 @@ public interface INodeJSCarrito {
     @PUT("quitarCarrito/{id_usuario}")
     Call<ItemCarrito>  quitarCarrito (@Path("id_usuario") String id_usuario ,
                                       @Body ItemCarrito productoCarrito);
+    @DELETE("eliminarCarrito/{id_usuario}")
+    Call<ItemCarrito> eliminarCarrito (@Path("id_usuario") String id_usuario);
 
 
 }

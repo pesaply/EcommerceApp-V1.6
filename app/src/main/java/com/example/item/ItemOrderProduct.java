@@ -6,9 +6,9 @@ public class ItemOrderProduct {
     private String OrderName;
     private String OrderImage;
     private String OrderSeller;
-    private int OrderPrice;
-    private String OrderOfferPercentage;
-    private String OrderDiscountPrice;
+    private Float OrderPrice;
+    private int OrderOfferPercentage;
+    private Float OrderDiscountPrice;
     private String OrderDate;
     private int OrderQuantity;
 
@@ -41,16 +41,16 @@ public class ItemOrderProduct {
         this.OrderImage = OrderImage;
     }
 
-    public int getOrderPrice() {return OrderPrice;}
-    public void setOrderPrice(int OrderPrice) {this.OrderPrice = OrderPrice;}
+    public Float getOrderPrice() {return OrderPrice;}
+    public void setOrderPrice(Float OrderPrice) {this.OrderPrice = OrderPrice;}
 
-    public String getOrderOfferPercentage() {return OrderOfferPercentage;}
-    public void setOrderOfferPercentage(String OrderOfferPercentage) {
+    public int getOrderOfferPercentage() {return OrderOfferPercentage;}
+    public void setOrderOfferPercentage(int OrderOfferPercentage) {
         this.OrderOfferPercentage = OrderOfferPercentage;
     }
 
-    public String getOrderDiscountPrice() {return OrderDiscountPrice;}
-    public void setOrderDiscountPrice(String OrderDiscountPrice) {
+    public Float getOrderDiscountPrice() {return OrderDiscountPrice;}
+    public void setOrderDiscountPrice(Float OrderDiscountPrice) {
         this.OrderDiscountPrice = OrderDiscountPrice;
     }
 

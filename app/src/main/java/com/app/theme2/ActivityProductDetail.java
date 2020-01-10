@@ -452,8 +452,8 @@ public class ActivityProductDetail extends AppCompatActivity {
                 itemOrderProduct.setOrderImage(jo_inside.getString("order_image"));
                 itemOrderProduct.setOrderSeller(jo_inside.getString("order_seller"));
                // itemOrderProduct.setOrderPrice(jo_inside.getString("order_price"));
-                itemOrderProduct.setOrderOfferPercentage(jo_inside.getString("order_offer"));
-                itemOrderProduct.setOrderDiscountPrice(jo_inside.getString("order_discount"));
+                // itemOrderProduct.setOrderOfferPercentage(jo_inside.getString("order_offer"));
+                // itemOrderProduct.setOrderDiscountPrice(jo_inside.getString("order_discount"));
                 itemOrderProduct.setOrderDate(jo_inside.getString("order_delivery_date"));
                 itemOrderProduct.setOrderQuantity(jo_inside.getInt("order_quantity"));
 
@@ -496,8 +496,8 @@ public class ActivityProductDetail extends AppCompatActivity {
             //Picasso.with(mContext).load("file:///android_asset/image/" + itemOrderProduct.getOrderImage()).into(holder.image_item_order_image);
             holder.text_order_title.setText(itemOrderProduct.getOrderName());
             holder.text_order_seller.setText(getResources().getString(R.string.seller) + itemOrderProduct.getOrderSeller());
-            holder.text_order_price.setText(itemOrderProduct.getOrderPrice());
-            holder.text_order_price_dic.setText(itemOrderProduct.getOrderDiscountPrice());
+            // holder.text_order_price.setText(itemOrderProduct.getOrderPrice());
+            //holder.text_order_price_dic.setText(itemOrderProduct.getOrderDiscountPrice());
             holder.text_order_price_percentage.setText(itemOrderProduct.getOrderOfferPercentage());
             holder.text_order_time.setText(getResources().getString(R.string.delivery) + itemOrderProduct.getOrderDate());
             holder.text_integer_number.setText(String.valueOf(itemOrderProduct.getOrderQuantity()));

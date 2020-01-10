@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.menu_go_favourite:
 
-                        Intent intent_pedidos = new Intent(MainActivity.this , ActivityHistorialPedidos.class);
+                        Intent intent_pedidos = new Intent(MainActivity.this , ActivityOrderProcessTab.class);
                         startActivity(intent_pedidos);
                         return true;
 
@@ -257,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
                             JsonObject gsonobj2 = obj2.getAsJsonObject();
                             String sucursalExistenciasincomillas = sucursalExistencia.replace("\"", "");
                             if (sucursalExistenciasincomillas.equals(gsonobj2.get("cedis").getAsString())){
-                                itemOrderProduct.setOrderPrice(gsonobj2.get("precio_inicial").getAsInt());
+                                itemOrderProduct.setOrderPrice(gsonobj2.get("precio_inicial").getAsFloat());
                                 total += gsonObj.get("piezas").getAsInt() * gsonobj2.get("precio_inicial").getAsInt();
 
                             }
@@ -398,7 +398,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //    TODO
-                showOrderPlace();
+                Intent intent_cart=new Intent(MainActivity.this,ActivityCart.class);
+                startActivity(intent_cart);
+                //showOrderPlace();
+
+                //showOrderPlace();
             }
         });
 
@@ -419,7 +423,8 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.menu_cart:
-                showOrderPlace();
+                //showOrderPlace();
+
 
                 return true;
             case R.id.menu_offer:
@@ -522,8 +527,8 @@ public class MainActivity extends AppCompatActivity {
                 itemOrderProduct.setOrderImage(jo_inside.getString("order_image"));
                 itemOrderProduct.setOrderSeller(jo_inside.getString("order_seller"));
                 //itemOrderProduct.setOrderPrice(jo_inside.getString("order_price"));
-                itemOrderProduct.setOrderOfferPercentage(jo_inside.getString("order_offer"));
-                itemOrderProduct.setOrderDiscountPrice(jo_inside.getString("order_discount"));
+               // itemOrderProduct.setOrderOfferPercentage(jo_inside.getString("order_offer"));
+                // itemOrderProduct.setOrderDiscountPrice(jo_inside.getString("order_discount"));
                 itemOrderProduct.setOrderDate(jo_inside.getString("order_delivery_date"));
                 itemOrderProduct.setOrderQuantity(jo_inside.getInt("order_quantity"));
 
@@ -566,7 +571,7 @@ public class MainActivity extends AppCompatActivity {
             holder.text_order_title.setText(itemOrderProduct.getOrderName());
             holder.text_order_seller.setText(getResources().getString(R.string.seller) + itemOrderProduct.getOrderSeller());
             holder.text_order_price.setText("Precio: " + String.valueOf(itemOrderProduct.getOrderPrice()));
-            holder.text_order_price_dic.setText(itemOrderProduct.getOrderDiscountPrice());
+            // holder.text_order_price_dic.setText(itemOrderProduct.getOrderDiscountPrice());
             holder.text_order_price_percentage.setText(itemOrderProduct.getOrderOfferPercentage());
             holder.text_order_time.setText(getResources().getString(R.string.delivery) + itemOrderProduct.getOrderDate());
             holder.text_integer_number.setText(String.valueOf(itemOrderProduct.getOrderQuantity()));
