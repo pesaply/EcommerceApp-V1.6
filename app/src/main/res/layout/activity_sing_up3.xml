@@ -135,7 +135,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/login_button"
-                android:text="@string/submit"
+                android:text="@string/crearcuenta"
                 android:textColor="@color/white" />
 
         </LinearLayout>

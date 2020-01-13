@@ -1,15 +1,13 @@
 package com.app.templateasdemo;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.support.design.shape.InterpolateOnScrollPositionChangeHelper;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.os.Bundle;
 
-public class Splash_Activity extends AppCompatActivity {
+public class ActivitySplashBienvenida extends AppCompatActivity {
 
     protected boolean active = true;
     protected int splashTime = 2000;
@@ -19,8 +17,12 @@ public class Splash_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash_screen);
-        readOnPreferences();
+        setContentView(R.layout.activity_splash_bienvenida);
+
+
+
+
+
         Thread splashThread = new Thread() {
             public void run() {
                 try {
@@ -36,25 +38,20 @@ public class Splash_Activity extends AppCompatActivity {
                     e.toString();
                 } finally {
 
-                    if(visita == "") {
 
-                        Intent intplay = new Intent(getApplicationContext(), SliderActivity.class);
-                        intplay.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intplay);
-                        finish();
-                    }else{
-                        Intent intent = new Intent(Splash_Activity.this, MainActivity.class);
+                        Intent intent = new Intent(ActivitySplashBienvenida.this, MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
 
                     }
-                }
             }
         };
+
         splashThread.start();
+
+
+
     }
-    private void readOnPreferences(){
-        SharedPreferences preferences =  getSharedPreferences("visita", Context.MODE_PRIVATE);
-        visita = preferences.getString("visita", "");
-    }
+
+
 }

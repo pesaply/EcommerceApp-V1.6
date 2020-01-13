@@ -413,15 +413,14 @@ public class HomeFragment extends Fragment {
 
                                              itemHomeCategoryList.setCategoryListPrice(cedisobject.getString("precio_inicial"));
                                         }
-
                                     }
 
                                 }
 
                                 itemHomeCategoryList.setCategoryListId(jo_inside.getString("_id"));
-                                itemHomeCategoryList.setCategoryListName(jo_inside.getString("dscproducto"));
+                                itemHomeCategoryList.setCategoryListName(jo_inside.getString("descripcion_corta"));
                                 itemHomeCategoryList.setCategoryListImage(jo_inside.getJSONArray("img1").getString(1));
-                                itemHomeCategoryList.setCategoryListDescription(jo_inside.getString("dscproducto"));
+                                itemHomeCategoryList.setCategoryListDescription(jo_inside.getString("descripcion_corta"));
 
 
                                 array_latest.add(itemHomeCategoryList);

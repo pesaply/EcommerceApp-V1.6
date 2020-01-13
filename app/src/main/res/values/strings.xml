@@ -63,6 +63,7 @@
     <string name="escuela">Escuela</string>
     <string name="codigopostal">Codigo Postal</string>
     <string name="sucursal">Sucursal</string>
+    <string name="crearcuenta">Crear Cuenta</string>
 
     <!--left navigation drawer-->
     <string name="menu_home">Home</string>
@@ -211,6 +212,16 @@
     <string name="total">Total</string>
     <string name="button_undo">Deshacer</string>
     <string name="forma_pago">Forma de pago</string>
+
+
+    <!--Choose_Schedule-->
+    <string name="choose_schedule">Horario de entrega</string>
+
+    <!--Order_Summary-->
+    <string name="order_summary">Resumen del Pedido</string>
+
+    <!--Payment_Methods-->
+    <string name="payment_methods">Formas de pago</string>
 
 
 </resources>

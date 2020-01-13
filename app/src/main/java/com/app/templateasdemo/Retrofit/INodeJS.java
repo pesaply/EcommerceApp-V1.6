@@ -31,4 +31,7 @@ public interface INodeJS {
     @GET("consultarUsuarioCorreo/{correo}")
     Call<JsonObject> consultarUsuarioCorreo (@Path("correo") String correo);
 
+    @GET("consultarUsuarioId/{id_usuario}")
+    Call<JsonObject> consultarUsuarioId (@Path("id_usuario") String id_usuario);
+
 }

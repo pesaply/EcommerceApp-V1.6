@@ -2,6 +2,7 @@ package com.app.templateasdemo;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -9,12 +10,14 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.PaintDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -35,6 +38,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.templateasdemo.Retrofit.INodeJS;
 import com.app.templateasdemo.Retrofit.INodeJSCarrito;
 import com.app.templateasdemo.Retrofit.INodeJSProducto;
 import com.example.item.ItemOrderProduct;
@@ -47,6 +51,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -67,10 +72,18 @@ public class ActivityCart extends AppCompatActivity {
     RecyclerView recyclerView_order_place;
     OrderPlaceAdapter adapter_orderPlaceAdapter;
 
-    public TextView txt_total, txt_subtotal, txt_desc_total;
+    public TextView txt_total, txt_subtotal, txt_desc_total, txt_elegir_escuela, text_elegir_pago, txt_forma_pago, txt_info_pago;
+
+    public CheckBox checkBoxEscuela, checkBoxSucursal;
+
+    public CardView card_view_sec_buy;
+
+    public ImageView img_forma_pago;
 
     String _id;
     String sucursalExistencia;
+    String forma_pago;
+    String info_pago;
 
     private static DecimalFormat df = new DecimalFormat("0.00");
 
@@ -84,8 +97,8 @@ public class ActivityCart extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        final CheckBox checkBoxEscuela = (CheckBox) findViewById(R.id.checkbox_escuela);
-        final CheckBox checkBoxSucursal = (CheckBox) findViewById(R.id.checkbox_sucursal);
+        checkBoxEscuela = (CheckBox) findViewById(R.id.checkbox_escuela);
+        checkBoxSucursal = (CheckBox) findViewById(R.id.checkbox_sucursal);
 
         checkBoxEscuela.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -122,17 +135,81 @@ public class ActivityCart extends AppCompatActivity {
 
         _id = getValueFromSharedPreferences("_id", "");
         sucursalExistencia = getValueFromSharedPreferences("sucursal", "5df519d8cfd0fe1348d57ff9");
+        forma_pago = getValueFromSharedPreferencesPayment("forma_pago", null);
+        info_pago = getValueFromSharedPreferencesPayment("info_pago", null);
 
         txt_total = (TextView) findViewById(R.id.total);
         txt_subtotal = (TextView) findViewById(R.id.subtotal);
         txt_desc_total = (TextView) findViewById(R.id.descuento);
 
+        txt_elegir_escuela = (TextView) findViewById(R.id.txt_elegir_escuela);
+
+        card_view_sec_buy = (CardView) findViewById(R.id.card_view_sec_buy);
+
+        text_elegir_pago = (TextView) findViewById(R.id.text_elegir_pago);
+
+        txt_forma_pago = (TextView) findViewById(R.id.txt_forma_pago);
+
+        img_forma_pago = (ImageView) findViewById(R.id.img_forma_pago);
+
+        txt_info_pago = (TextView) findViewById(R.id.txt_info_pago);
+
         showOrderPlace();
+
+        consultarUsuarioId();
+
+        txt_elegir_escuela.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_choose_schedule = new Intent(ActivityCart.this, ActivityChooseSchedule.class);
+                startActivity(intent_choose_schedule);
+            }
+        });
+
+        card_view_sec_buy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_order_summary = new Intent(ActivityCart.this, ActivityOrderSummary.class);
+                startActivity(intent_order_summary);
+            }
+        });
+
+        text_elegir_pago.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_payment_methods = new Intent(ActivityCart.this, ActivityPaymentMethods.class);
+                startActivity(intent_payment_methods);
+            }
+        });
+
+        forma_pago();
+
+    }
+
+    private void forma_pago() {
+
+        if (forma_pago != null && info_pago != null) {
+
+            if (forma_pago.equals("Efectivo")) {
+                txt_forma_pago.setText(forma_pago);
+                img_forma_pago.setImageResource(R.drawable.icons8_efectivo);
+                img_forma_pago.setVisibility(View.VISIBLE);
+                text_elegir_pago.setText("Cambiar");
+                txt_info_pago.setText(info_pago);
+                txt_info_pago.setVisibility(View.VISIBLE);
+            }
+
+        }
 
     }
 
     private String getValueFromSharedPreferences(String key, String defaultValue){
         SharedPreferences sharepref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        return sharepref.getString(key, defaultValue);
+    }
+
+    private String getValueFromSharedPreferencesPayment(String key, String defaultValue){
+        SharedPreferences sharepref = getSharedPreferences("PreferencesPayment", Context.MODE_PRIVATE);
         return sharepref.getString(key, defaultValue);
     }
 
@@ -147,6 +224,42 @@ public class ActivityCart extends AppCompatActivity {
                 return super.onOptionsItemSelected(menuItem);
         }
         return true;
+    }
+
+    private void consultarUsuarioId() {
+
+        //Metodo para consultar Usuario por Id
+        Retrofit consultarUsuarioId = new Retrofit.Builder()
+                .baseUrl("http://162.214.67.53:3000/api/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        INodeJS consultarUsuarioIdInterfas = consultarUsuarioId.create(INodeJS.class);
+        String _idsincomillas = _id.replace("\"", "");
+        Call<JsonObject> call = consultarUsuarioIdInterfas.consultarUsuarioId(_idsincomillas);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
+
+                if (response.body().get("usuario").getAsJsonObject().has("escuela")) {
+                    JsonObject escuelaObject = response.body().get("usuario").getAsJsonObject().get("escuela").getAsJsonObject();
+                    String escuela = escuelaObject.get("nombre_centro_trabajo").getAsString();
+                    checkBoxEscuela.setText(escuela);
+                }
+
+                if (response.body().get("usuario").getAsJsonObject().has("sucursal")) {
+                    JsonObject sucursalObject = response.body().get("usuario").getAsJsonObject().get("sucursal").getAsJsonObject();
+                    String sucursal = sucursalObject.get("cedis").getAsString();
+                    checkBoxSucursal.setText(sucursal);
+                }
+
+            }
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 
     private void showOrderPlace() {
@@ -496,6 +609,7 @@ public class ActivityCart extends AppCompatActivity {
 
                             String sucursalExistenciasincomillas = sucursalExistencia.replace("\"", "");
                             int number = Integer.parseInt(holder.text_integer_number.getText().toString()) - 1;
+                            itemOrderProduct.setOrderQuantity(number);
                             holder.text_integer_number.setText((String.valueOf(number)));
                             ItemCarrito carrito = new ItemCarrito(itemOrderProduct.getIdproducto(), sucursalExistenciasincomillas, number);
                             updatePiecesCart(carrito);
@@ -536,6 +650,7 @@ public class ActivityCart extends AppCompatActivity {
                                         } else {
                                             int number = Integer.parseInt(holder.text_integer_number.getText().toString()) + 1;
                                             holder.text_integer_number.setText(String.valueOf(number));
+                                            itemOrderProduct.setOrderQuantity(number);
                                             ItemCarrito carrito = new ItemCarrito(itemOrderProduct.getIdproducto(), sucursalExistenciasincomillas, number);
                                             updatePiecesCart(carrito);
                                         }
@@ -695,7 +810,7 @@ public class ActivityCart extends AppCompatActivity {
 
             private void init() {
                 background = new ColorDrawable(Color.RED);
-                xMark = ContextCompat.getDrawable(ActivityCart.this, R.drawable.ic_delete_item);
+                xMark = ContextCompat.getDrawable(ActivityCart.this, R.drawable.iconfinder_basura);
                 xMark.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
                 xMarkMargin = (int) ActivityCart.this.getResources().getDimension(R.dimen.ic_clear_margin);
                 initiated = true;

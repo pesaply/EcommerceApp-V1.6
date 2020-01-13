@@ -285,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     //Metodo para consultar Carrito
-    public void  minicarrito(){
+    public void  minicarrito() {
         Retrofit consultarCarrito = new Retrofit.Builder()
                 .baseUrl("http://162.214.67.53:3000/api/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -297,23 +297,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
 
-                if(response.body() == null || response.body().get("shoppingCart").isJsonArray()){
+                if (response.body() == null || response.body().get("shoppingCart").isJsonArray()) {
                     txtViewCount.setText(String.valueOf(0));
-                }else{
+                } else {
                     JsonArray items = response.body().get("shoppingCart").getAsJsonObject().get("items").getAsJsonArray();
                     txtViewCount.setText(String.valueOf(items.size()));
 
                 }
 
-               //Toast.makeText(MainActivity.this , "" + response.body() , Toast.LENGTH_LONG).show();
+                //Toast.makeText(MainActivity.this , "" + response.body() , Toast.LENGTH_LONG).show();
 
             }
+
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
             }
         });
-
-
     }
 
 

@@ -1,5 +1,6 @@
 package com.app.templateasdemo;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,21 +15,31 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class ActivityPerfil extends AppCompatActivity {
+    String nombre;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
 
+        SharedPreferences preferences = getSharedPreferences("Preferences" , Context.MODE_PRIVATE);
+        nombre = preferences.getString("nombre" , "");
 
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         Button btn = (Button) findViewById(R.id.btn_iniciar_sesion);
         TextView tvv = (TextView) findViewById(R.id.tvw_cerrar_sesion);
+        TextView nombre_usuario = (TextView) findViewById(R.id.txvnameuser);
         toolbar.setTitle(getString(R.string.mi_perfil));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+
+
+        String nombresincomillas = nombre;
+        String val2 = nombresincomillas.replace("\"", "");
+        nombre_usuario.setText(val2);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,11 +67,9 @@ public class ActivityPerfil extends AppCompatActivity {
 
             }
         });
-
-
-
-
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

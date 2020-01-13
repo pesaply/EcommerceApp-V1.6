@@ -72,7 +72,8 @@ public class ActivitySingup3 extends ActivityPayment {
                 if (TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword)) {
                     LayoutInflater inflater = getLayoutInflater();
                     View layout = inflater.inflate(R.layout.msj_ingrese_todos_datos, null);
-                    Toast toast = Toast.makeText(ActivitySingup3.this, "", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(ActivitySingup3.this, "",
+                            Toast.LENGTH_SHORT);
                     toast.setView(layout);
                     toast.show();
                 } else {
@@ -133,7 +134,7 @@ public class ActivitySingup3 extends ActivityPayment {
     }
 
     private void goToMain() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, ActivitySplashBienvenida.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
