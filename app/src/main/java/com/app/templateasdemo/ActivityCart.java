@@ -72,7 +72,10 @@ public class ActivityCart extends AppCompatActivity {
     RecyclerView recyclerView_order_place;
     OrderPlaceAdapter adapter_orderPlaceAdapter;
 
-    public TextView txt_total, txt_subtotal, txt_desc_total, txt_elegir_escuela, text_elegir_pago, txt_forma_pago, txt_info_pago;
+    LinearLayout lyt_tipo_entrega;
+
+    public TextView txt_total, txt_subtotal, txt_desc_total, txt_elegir_horario, text_elegir_pago,
+            txt_forma_pago, txt_info_pago, txt_tipo_entrega, txt_info_entrega;
 
     public CheckBox checkBoxEscuela, checkBoxSucursal;
 
@@ -84,8 +87,13 @@ public class ActivityCart extends AppCompatActivity {
     String sucursalExistencia;
     String forma_pago;
     String info_pago;
+    String entrega;
+    String tipo_entrega;
+    String info_entrega;
 
     private static DecimalFormat df = new DecimalFormat("0.00");
+
+    Boolean statusPago = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,52 +105,25 @@ public class ActivityCart extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        checkBoxEscuela = (CheckBox) findViewById(R.id.checkbox_escuela);
-        checkBoxSucursal = (CheckBox) findViewById(R.id.checkbox_sucursal);
-
-        checkBoxEscuela.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                if(checkBoxEscuela.isChecked())  //Check if first is checked
-                {
-                    //Set uncheck to second
-                    checkBoxSucursal.setChecked(false);
-                }
-                else
-                {
-                    //Set checked to second
-                    checkBoxSucursal.setChecked(true);
-                }
-            }
-        });
-
-        checkBoxSucursal.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(checkBoxSucursal.isChecked())  //Check if first is checked
-                {
-                    //Set uncheck to second
-                    checkBoxEscuela.setChecked(false);
-                }
-                else
-                {
-                    //Set checked to second
-                    checkBoxEscuela.setChecked(true);
-                }
-            }
-        });
-
         _id = getValueFromSharedPreferences("_id", "");
         sucursalExistencia = getValueFromSharedPreferences("sucursal", "5df519d8cfd0fe1348d57ff9");
         forma_pago = getValueFromSharedPreferencesPayment("forma_pago", null);
         info_pago = getValueFromSharedPreferencesPayment("info_pago", null);
+        entrega = getValueFromSharedPreferencesSchedule("entrega", null);
+        tipo_entrega = getValueFromSharedPreferencesSchedule("tipo_entrega", null);
+        info_entrega = getValueFromSharedPreferencesSchedule("info_entrega", null);
 
         txt_total = (TextView) findViewById(R.id.total);
         txt_subtotal = (TextView) findViewById(R.id.subtotal);
         txt_desc_total = (TextView) findViewById(R.id.descuento);
 
-        txt_elegir_escuela = (TextView) findViewById(R.id.txt_elegir_escuela);
+        txt_elegir_horario= (TextView) findViewById(R.id.txt_elegir_horario);
+
+        lyt_tipo_entrega = (LinearLayout) findViewById(R.id.lyt_tipo_entrega);
+
+        txt_tipo_entrega = (TextView) findViewById(R.id.txt_tipo_entrega);
+
+        txt_info_entrega = (TextView) findViewById(R.id.txt_info_entrega);
 
         card_view_sec_buy = (CardView) findViewById(R.id.card_view_sec_buy);
 
@@ -154,11 +135,64 @@ public class ActivityCart extends AppCompatActivity {
 
         txt_info_pago = (TextView) findViewById(R.id.txt_info_pago);
 
+        checkBoxEscuela = (CheckBox) findViewById(R.id.checkbox_escuela);
+        checkBoxSucursal = (CheckBox) findViewById(R.id.checkbox_sucursal);
+
+        checkBoxEscuela.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(checkBoxEscuela.isChecked())  //Check if first is checked
+                {
+
+                    txt_elegir_horario.setVisibility(View.VISIBLE);
+
+                    //Set uncheck to second
+                    if (checkBoxSucursal.isChecked()) {
+                        checkBoxSucursal.setChecked(false);
+                    }
+
+                } else {
+                    txt_elegir_horario.setVisibility(View.INVISIBLE);
+                    txt_elegir_horario.setText("Elegir");
+                    lyt_tipo_entrega.setVisibility(View.GONE);
+                    if (entrega != null) {
+
+                        if (entrega.equals("Escuela")) {
+                            removeValueFromSharedPreferencesSchedule("entrega");
+                            removeValueFromSharedPreferencesSchedule("tipo_entrega");
+                            removeValueFromSharedPreferencesSchedule("info_entrega");
+                        }
+
+                    }
+                }
+            }
+        });
+
+        checkBoxSucursal.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(checkBoxSucursal.isChecked())  //Check if first is checked
+                {
+
+                    saveOnPreferences("Sucursal",null, null);
+                    entrega = getValueFromSharedPreferencesSchedule("entrega", null);
+
+                    //Set uncheck to second
+                    if (checkBoxEscuela.isChecked()) {
+                        checkBoxEscuela.setChecked(false);
+                    }
+
+                } else {
+                    removeValueFromSharedPreferencesSchedule("entrega");
+                }
+            }
+        });
+
         showOrderPlace();
 
         consultarUsuarioId();
 
-        txt_elegir_escuela.setOnClickListener(new View.OnClickListener() {
+        txt_elegir_horario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent_choose_schedule = new Intent(ActivityCart.this, ActivityChooseSchedule.class);
@@ -169,8 +203,17 @@ public class ActivityCart extends AppCompatActivity {
         card_view_sec_buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_order_summary = new Intent(ActivityCart.this, ActivityOrderSummary.class);
-                startActivity(intent_order_summary);
+
+                if ( !checkBoxEscuela.isChecked() && !checkBoxSucursal.isChecked() ) {
+                    Toast.makeText(ActivityCart.this, "Elije un lugar de entrega", Toast.LENGTH_LONG).show();
+                } else if ( checkBoxEscuela.isChecked() && txt_elegir_horario.getText().toString().equals("Elegir") ) {
+                    Toast.makeText(ActivityCart.this, "Elije un hoario de entrega", Toast.LENGTH_LONG).show();
+                } else if (!statusPago) {
+                    Toast.makeText(ActivityCart.this, "Elije una forma de pago", Toast.LENGTH_LONG).show();
+                } else {
+                    Intent intent_order_summary = new Intent(ActivityCart.this, ActivityOrderSummary.class);
+                    startActivity(intent_order_summary);
+                }
             }
         });
 
@@ -184,6 +227,8 @@ public class ActivityCart extends AppCompatActivity {
 
         forma_pago();
 
+        tipo_entrega();
+
     }
 
     private void forma_pago() {
@@ -191,12 +236,39 @@ public class ActivityCart extends AppCompatActivity {
         if (forma_pago != null && info_pago != null) {
 
             if (forma_pago.equals("Efectivo")) {
+                statusPago = true;
                 txt_forma_pago.setText(forma_pago);
                 img_forma_pago.setImageResource(R.drawable.icons8_efectivo);
                 img_forma_pago.setVisibility(View.VISIBLE);
                 text_elegir_pago.setText("Cambiar");
                 txt_info_pago.setText(info_pago);
                 txt_info_pago.setVisibility(View.VISIBLE);
+            }
+
+        }
+
+    }
+
+    private void tipo_entrega() {
+
+        if (entrega != null) {
+
+            if (entrega.equals("Escuela") && tipo_entrega != null && info_entrega != null) {
+
+                checkBoxEscuela.setChecked(true);
+                txt_elegir_horario.setText("Cambiar");
+                txt_elegir_horario.setVisibility(View.VISIBLE);
+                if (tipo_entrega.equals("Urgente")) {
+                    txt_tipo_entrega.setText(tipo_entrega);
+                    lyt_tipo_entrega.setVisibility(View.VISIBLE);
+                } else if (tipo_entrega.equals("Programada")) {
+                    txt_tipo_entrega.setText(tipo_entrega);
+                    txt_info_entrega.setText(info_entrega);
+                    lyt_tipo_entrega.setVisibility(View.VISIBLE);
+                }
+
+            } else if (entrega.equals("Sucursal")) {
+                checkBoxSucursal.setChecked(true);
             }
 
         }
@@ -211,6 +283,29 @@ public class ActivityCart extends AppCompatActivity {
     private String getValueFromSharedPreferencesPayment(String key, String defaultValue){
         SharedPreferences sharepref = getSharedPreferences("PreferencesPayment", Context.MODE_PRIVATE);
         return sharepref.getString(key, defaultValue);
+    }
+
+    private void saveOnPreferences(String entrega, String tipo_entrega, String info_entrega) {
+
+        SharedPreferences prefs = getSharedPreferences("PreferencesSchedule",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("entrega", entrega);
+        editor.putString("tipo_entrega", tipo_entrega);
+        editor.putString("info_entrega", info_entrega);
+        editor.apply();
+
+    }
+
+    private String getValueFromSharedPreferencesSchedule(String key, String defaultValue){
+        SharedPreferences sharepref = getSharedPreferences("PreferencesSchedule", Context.MODE_PRIVATE);
+        return sharepref.getString(key, defaultValue);
+    }
+
+    private void removeValueFromSharedPreferencesSchedule(String key){
+        SharedPreferences sharepref = getSharedPreferences("PreferencesSchedule",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharepref.edit();
+        editor.remove(key);
+        editor.apply();
     }
 
     @Override

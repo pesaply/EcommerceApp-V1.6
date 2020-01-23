@@ -21,5 +21,4 @@ public class AddressFragment extends Fragment {
         return rootView;
     }
 
-
 }

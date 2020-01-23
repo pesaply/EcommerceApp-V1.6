@@ -12,6 +12,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         lintOptions {
 
             checkReleaseBuilds false
@@ -95,5 +96,10 @@ dependencies {
 
     implementation 'com.github.lzyzsd:Circleprogress:1.2.1'
     implementation 'android.arch.lifecycle:extensions:1.1.1'
+
+
+    //implementacio for socket.io
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.github.nkzawa:socket.io-client:0.6.0'
 
 }

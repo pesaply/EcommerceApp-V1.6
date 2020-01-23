@@ -34,9 +34,9 @@ public class DeliveryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_delivery_theme2, container, false);
 
-        array_process_list=new ArrayList<>();
+        array_process_list = new ArrayList<>();
 
-        recyclerViewProcess=(RecyclerView)rootView.findViewById(R.id.vertical_order_list);
+        recyclerViewProcess = (RecyclerView) rootView.findViewById(R.id.vertical_order_list);
         recyclerViewProcess.setHasFixedSize(false);
         recyclerViewProcess.setNestedScrollingEnabled(false);
         recyclerViewProcess.setLayoutManager(new GridLayoutManager(getActivity(), 1));
@@ -47,6 +47,7 @@ public class DeliveryFragment extends Fragment {
 
         return rootView;
     }
+
     public ArrayList<ItemOrderProcess> loadJSONFromAssetOrderProcessList() {
         ArrayList<ItemOrderProcess> locList = new ArrayList<>();
         String json = null;
@@ -89,6 +90,5 @@ public class DeliveryFragment extends Fragment {
         recyclerViewProcess.setAdapter(orderProcessAdapter);
 
     }
-
-
 }
+

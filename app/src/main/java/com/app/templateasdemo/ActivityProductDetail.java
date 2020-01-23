@@ -337,25 +337,7 @@ public class ActivityProductDetail extends AppCompatActivity {
     }
 
 
-    //Metodo para Reagistrar Carrrito
-   /* private void insertarCarrito (final String id_usuario, final ItemCarrito productoCarrito){
-
-
-        compositeDisposable.add(MyapiCarrito.insertarCarrito(id_usuario, productoCarrito)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Consumer<String>() {
-                                    @Override
-                                    public void accept(String s) throws Exception {
-                                        Toast.makeText(ActivityProductDetail.this, "Se Creo Carrito" , Toast.LENGTH_LONG).show();
-                                    }
-                                }));
-
-
-
-    }*/
-
-   private void sendNetworkRequest(final ItemCarrito carrito){
+    private void sendNetworkRequest(final ItemCarrito carrito){
 
        Retrofit.Builder builder  = new Retrofit.Builder()
                .baseUrl("http://162.214.67.53:3000/api/")
@@ -476,9 +458,6 @@ public class ActivityProductDetail extends AppCompatActivity {
         });
 
     }
-
-
-
 
 
     private String getValueFromSharedPreferences(String key, String defaultValue){

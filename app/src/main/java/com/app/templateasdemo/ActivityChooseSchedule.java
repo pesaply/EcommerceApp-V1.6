@@ -3,6 +3,8 @@ package com.app.templateasdemo;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
@@ -20,7 +23,10 @@ import android.widget.Toast;
 import com.app.templateasdemo.Retrofit.INodeJS;
 import com.google.gson.JsonObject;
 
+import org.w3c.dom.Text;
+
 import java.util.Calendar;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,8 +36,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ActivityChooseSchedule extends AppCompatActivity {
 
     TextView txt_escuela;
-
-    CheckBox checkbox_urgente, checkbox_programada;
+    static TextView txt_hora;
+    CheckBox checkbox_urgente;
+    static CheckBox checkbox_programada;
+    Button btn_assign_schedule;
     String _id;
 
     @Override
@@ -46,8 +54,10 @@ public class ActivityChooseSchedule extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         txt_escuela = (TextView) findViewById(R.id.txt_escuela);
+        txt_hora = (TextView) findViewById(R.id.txt_hora);
         checkbox_urgente = (CheckBox) findViewById(R.id.checkbox_urgente);
         checkbox_programada = (CheckBox) findViewById(R.id.checkbox_programada);
+        btn_assign_schedule = (Button) findViewById(R.id.btn_assign_schedule);
 
         _id = getValueFromSharedPreferences("_id", "");
 
@@ -60,7 +70,14 @@ public class ActivityChooseSchedule extends AppCompatActivity {
                 if(checkbox_urgente.isChecked())  //Check if first is checked
                 {
                     //Set uncheck to second
-                    checkbox_programada.setChecked(false);
+                    if (checkbox_programada.isChecked()){
+                        checkbox_programada.setChecked(false);
+                    }
+
+                    if (!txt_hora.getText().toString().isEmpty()) {
+                        txt_hora.setText("");
+                    }
+
                 }
             }
         });
@@ -69,12 +86,41 @@ public class ActivityChooseSchedule extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-                if(checkbox_programada.isChecked())  //Check if first is checked
+                if(checkbox_programada.isChecked()) //Check if first is checked
                 {
                     //Set uncheck to second
-                    checkbox_urgente.setChecked(false);
+                    if (checkbox_urgente.isChecked()){
+                        checkbox_urgente.setChecked(false);
+                    }
                     DialogFragment newFragment = new TimePickerFragment();
                     newFragment.show(getSupportFragmentManager(), "timePicker");
+                } else {
+                    if (!txt_hora.getText().toString().isEmpty()) {
+                        txt_hora.setText("");
+                    }
+                }
+            }
+        });
+
+        btn_assign_schedule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!checkbox_urgente.isChecked() && !checkbox_programada.isChecked()) {
+                    Toast.makeText(ActivityChooseSchedule.this, "Elija un horario de entrega", Toast.LENGTH_LONG).show();
+                } else if (checkbox_urgente.isChecked() && !checkbox_programada.isChecked()) {
+
+                    saveOnPreferences("Escuela","Urgente", "");
+                    Intent intent_cart = new Intent(ActivityChooseSchedule.this, ActivityCart.class);
+                    intent_cart.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent_cart);
+
+                } else if (!checkbox_urgente.isChecked() && checkbox_programada.isChecked()) {
+
+                    saveOnPreferences("Escuela","Programada", txt_hora.getText().toString());
+                    Intent intent_cart = new Intent(ActivityChooseSchedule.this, ActivityCart.class);
+                    intent_cart.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent_cart);
+
                 }
             }
         });
@@ -84,6 +130,17 @@ public class ActivityChooseSchedule extends AppCompatActivity {
     private String getValueFromSharedPreferences(String key, String defaultValue){
         SharedPreferences sharepref = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         return sharepref.getString(key, defaultValue);
+    }
+
+    private void saveOnPreferences(String entrega, String tipo_entrega, String info_entrega) {
+
+        SharedPreferences prefs = getSharedPreferences("PreferencesSchedule",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("entrega", entrega);
+        editor.putString("tipo_entrega", tipo_entrega);
+        editor.putString("info_entrega", info_entrega);
+        editor.apply();
+
     }
 
     @Override
@@ -98,11 +155,6 @@ public class ActivityChooseSchedule extends AppCompatActivity {
         }
         return true;
     }
-
-    /*public void showTimePickerDialog(View v) {
-        DialogFragment newFragment = new TimePickerFragment();
-        newFragment.show(getSupportFragmentManager(), "timePicker");
-    }*/
 
     public static class TimePickerFragment extends DialogFragment
             implements TimePickerDialog.OnTimeSetListener {
@@ -120,8 +172,46 @@ public class ActivityChooseSchedule extends AppCompatActivity {
         }
 
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            // Do something with the time chosen by the user
+
+            // Use the current time as the default values for the picker
+            final Calendar c = Calendar.getInstance();
+            int currentHour = c.get(Calendar.HOUR_OF_DAY);
+            int currentMinute = c.get(Calendar.MINUTE);
+
+            String amPm;
+
+            if (hourOfDay < currentHour || (hourOfDay <= currentHour && minute < currentMinute)) {
+                Toast.makeText(getContext(), "No se puede asignar un horario menor al actual", Toast.LENGTH_LONG).show();
+                checkbox_programada.setChecked(false);
+                if (!txt_hora.getText().toString().isEmpty()) {
+                    txt_hora.setText("");
+                }
+            } else {
+
+                if (hourOfDay >= 12) {
+                    amPm = "PM";
+                } else {
+                    amPm = "AM";
+                }
+
+                if (!checkbox_programada.isChecked()) {
+                    checkbox_programada.setChecked(true);
+                }
+
+                txt_hora.setText(String.format("%02d:%02d", hourOfDay, minute) + " " + amPm);
+
+            }
+
         }
+
+        @Override
+        public void onCancel(DialogInterface dialog) {
+            checkbox_programada.setChecked(false);
+            if (!txt_hora.getText().toString().isEmpty()) {
+                txt_hora.setText("");
+            }
+        }
+
     }
 
     private void consultarUsuarioId() {

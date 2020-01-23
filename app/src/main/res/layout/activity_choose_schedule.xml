@@ -112,10 +112,19 @@
                         android:id="@+id/checkbox_programada"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:singleLine="true"
                         android:text="Programada"
                         android:textColor="@color/gray"
                         android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/txt_hora"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:layout_marginRight="10sp" />
 
                 </LinearLayout>
 

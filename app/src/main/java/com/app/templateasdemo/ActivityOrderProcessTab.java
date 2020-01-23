@@ -1,6 +1,8 @@
 package com.app.templateasdemo;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,19 +12,41 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.app.templateasdemo.Retrofit.INodeJSPedido;
 import com.example.fragmenttheme2.AddressFragment;
 import com.example.fragmenttheme2.CancelFragment;
 import com.example.fragmenttheme2.DeliveryFragment;
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
+import com.google.gson.JsonObject;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ActivityOrderProcessTab extends AppCompatActivity {
 
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    String _id;
+    String ds;
+    String sucursalExistencia;
+    private String Nickname = "carlos";
+    private Socket socket;
+
 
 
     @Override
@@ -40,7 +64,6 @@ public class ActivityOrderProcessTab extends AppCompatActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-
     }
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -49,7 +72,6 @@ public class ActivityOrderProcessTab extends AppCompatActivity {
 
         viewPager.setAdapter(adapter);
     }
-
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
@@ -103,4 +125,6 @@ public class ActivityOrderProcessTab extends AppCompatActivity {
         startActivity(intent);
         super.onBackPressed();
     }
+
+
 }
