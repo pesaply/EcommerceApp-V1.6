@@ -40,7 +40,6 @@ public class ActivityPerfil extends AppCompatActivity {
         String nombresincomillas = nombre;
         String val2 = nombresincomillas.replace("\"", "");
         nombre_usuario.setText(val2);
-
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
