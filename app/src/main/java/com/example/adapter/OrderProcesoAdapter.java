@@ -88,8 +88,10 @@ public class OrderProcesoAdapter extends RecyclerView.Adapter<OrderProcesoAdapte
             donut_progress = (DonutProgress) itemView.findViewById(R.id.donut_progress);
             donut_progress.setDonut_progress(String.valueOf(25));
             donut_progress.setStartingDegree(270);
-            donut_progress.setFinishedStrokeColor(Color.parseColor("#FF5722"));
+            donut_progress.setFinishedStrokeColor(Color.parseColor("#757575"));
             donut_progress.setFinishedStrokeWidth(40);
+            donut_progress.setTextSize(32);
+            donut_progress.setTextColor(Color.parseColor("#FF5722"));
 
 
             text_title = (TextView) itemView.findViewById(R.id.text_title);

@@ -1,5 +1,6 @@
 package com.example.fragmenttheme2;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -44,6 +45,7 @@ public class AddressFragment extends Fragment {
     RecyclerView recyclerViewProcess;
     OrderProcesoAdapter orderProcesoAdapter;
     ArrayList<ItemOrderProceso> array_process_list;
+    ArrayList<ItemOrderProceso> array_process_list2;
 
     String _id;
     String estatuemit;
@@ -127,8 +129,8 @@ public class AddressFragment extends Fragment {
 
 
                            ItemOrderProceso itemOrderProceso = new ItemOrderProceso();
-                           itemOrderProceso.1setOrderProcessDate(estatuemit);
-                           itemOrderProceso.setOrderProcessNo("Numero de Pedido: " +folio);
+                           itemOrderProceso.setOrderProcessDate(estatus);
+                           itemOrderProceso.setOrderProcessNo("#" +_idpedido);
                            itemOrderProceso.setOrderProcessTitle(fecha);
                           // itemOrderProceso.setOrderProcessPrice(jo_inside.getString("order_price"));
                            //itemOrderProceso.setOrderProcessStatus(jo_inside.getString("order_status"));
@@ -165,8 +167,12 @@ public class AddressFragment extends Fragment {
                 @Override
                 public void run() {
                     String data = (String) args[0];
-                    Toast.makeText(getActivity().getApplicationContext(), "Tu Pedido esta: " + data, Toast.LENGTH_LONG).show();
-                    itemOrderProceso.setOrderProcessDate(estatuemit);
+                    Toast.makeText(getActivity().getApplicationContext(), "Tu Pedido SISCOM esta: " + data, Toast.LENGTH_LONG).show();
+                    array_process_list.get(0).setOrderProcessDate(data);
+                   // Toast.makeText(getActivity().getApplicationContext(), "" + array_process_list, Toast.LENGTH_LONG).show();
+
+
+                    setAdapterHomeCategoryList();
 
                 }
             });

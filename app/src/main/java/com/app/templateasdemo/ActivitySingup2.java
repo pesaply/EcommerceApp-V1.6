@@ -184,6 +184,9 @@ public class ActivitySingup2 extends AppCompatActivity{
 
                         nombre_centro_trabajo = universidad.get_id();
 
+                        Toast.makeText(ActivitySingup2.this , ""  + nombre_centro_trabajo , Toast.LENGTH_SHORT).show();
+
+
                     }
 
                     @Override

@@ -143,6 +143,7 @@ public class HomeFragment extends Fragment {
         //loadJSONFromAssetHomeLatest();
         //loadJSONFromAssetHomeCoupon();
         loadJSONFromAssetHomeTrending();
+        setAdapterHomeCategoryList();
 
         getFromSharedPreferences("sucursal","no hay");
 
@@ -427,7 +428,7 @@ public class HomeFragment extends Fragment {
 
                             }
 
-                            setAdapterHomeCategoryList();
+
 
 
 //                            Toast.makeText(getContext(), "aki" + sucursal, Toast.LENGTH_SHORT).show();

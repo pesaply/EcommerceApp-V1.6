@@ -27,13 +27,13 @@ public class ActivityPerfil extends AppCompatActivity {
 
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        Button btn = (Button) findViewById(R.id.btn_iniciar_sesion);
+        Button btn = (Button) findViewById(R.id.btn_iniciar_sesion6);
         TextView tvv = (TextView) findViewById(R.id.tvw_cerrar_sesion);
-        TextView nombre_usuario = (TextView) findViewById(R.id.txvnameuser);
-        toolbar.setTitle(getString(R.string.mi_perfil));
+        TextView nombre_usuario = (TextView) findViewById(R.id.textView);
+/*        toolbar.setTitle(getString(R.string.mi_perfil));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);*/
 
 
 

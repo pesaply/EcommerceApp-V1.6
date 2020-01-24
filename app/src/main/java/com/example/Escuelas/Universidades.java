@@ -5,6 +5,7 @@ public class Universidades {
     public String nombre_centro_trabajo;
 
     public Universidades(String _id, String nombre_centro_trabajo) {
+        this._id = _id;
         this.nombre_centro_trabajo = nombre_centro_trabajo;
     }
 

@@ -1,4 +1,5 @@
 package com.app.templateasdemo;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -53,6 +54,8 @@ public class ActivitySingup3 extends ActivityPayment {
         final String Phone = bundle.getString("Phone");
         final String School = bundle.getString("School");
         final String Sucursal = bundle.getString("Sucursal");
+
+        Toast.makeText(ActivitySingup3.this , " " + School , Toast.LENGTH_SHORT ).show();
 
         //Init API
         Retrofit retrofit = RetrofitClient.getInstance();
