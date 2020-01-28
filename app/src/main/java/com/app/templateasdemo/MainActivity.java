@@ -298,10 +298,10 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
 
                 if (response.body() == null || response.body().get("shoppingCart").isJsonArray()) {
-                    txtViewCount.setText(String.valueOf(0));
+                    //txtViewCount.setText(String.valueOf(0));
                 } else {
                     JsonArray items = response.body().get("shoppingCart").getAsJsonObject().get("items").getAsJsonArray();
-                    txtViewCount.setText(String.valueOf(items.size()));
+                    //txtViewCount.setText(String.valueOf(items.size()));
 
                 }
 

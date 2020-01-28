@@ -139,8 +139,8 @@ public class HomeFragment extends Fragment {
 
 
         loadJSONFromAssetHomeSlider();
+        loadJSONFromAssetHomeLatest();
         loadJSONFromAssetHomeCategory();
-        //loadJSONFromAssetHomeLatest();
         //loadJSONFromAssetHomeCoupon();
         loadJSONFromAssetHomeTrending();
         setAdapterHomeCategoryList();
@@ -377,7 +377,7 @@ public class HomeFragment extends Fragment {
         adapter_category = new CategoryHomeAdapter(getActivity(), array_category);
         recycler_home_category.setAdapter(adapter_category);
 
-        loadJSONFromAssetHomeLatest();
+       // loadJSONFromAssetHomeLatest();
     }
 
 

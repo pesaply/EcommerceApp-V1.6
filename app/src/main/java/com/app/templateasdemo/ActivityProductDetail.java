@@ -144,6 +144,7 @@ public class ActivityProductDetail extends AppCompatActivity {
         sucursalExistencia = getValueFromSharedPreferences("sucursal", "5df519d8cfd0fe1348d57ff9");
         _id = getValueFromSharedPreferences("_id", "");
         loadJSONFromAssetGallery();
+        getIncomingIntent();
     }
 
 
@@ -237,7 +238,8 @@ public class ActivityProductDetail extends AppCompatActivity {
 
                 }else{
                     //no este logeado
-                    startActivityForResult(new Intent(getApplicationContext(), ActivityLogin.class), REQUEST_CODE);
+                    startActivityForResult(new Intent(getApplicationContext(), ActivityLogin.class), 21);
+
 
 
                 }
@@ -253,8 +255,7 @@ public class ActivityProductDetail extends AppCompatActivity {
         text_product_cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if(!nombre.equals("") ){
+               if(!nombre.equals("") ){
 
                     if(existenciaGlobal > 0){
 
@@ -305,10 +306,11 @@ public class ActivityProductDetail extends AppCompatActivity {
                 }else{
                     //no este logeado
 
-                    startActivityForResult(new Intent(getApplicationContext(), ActivityLogin.class), REQUEST_CODE);
-
-
-
+                    //startActivityForResult(new Intent(getApplicationContext(), ActivityLogin.class), REQUEST_CODE);
+                   Intent intent = new Intent(getApplicationContext(), ActivityLogin.class);
+                   intent.putExtra("code" , 12);
+                   intent.putExtra("idProducto",idProductoGlobal);
+                   startActivity(intent);
 
                 }
 
@@ -470,11 +472,11 @@ public class ActivityProductDetail extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_CODE){
                 if(resultCode == RESULT_OK){
-//                    Toast.makeText(ActivityProductDetail.this, "resultaldo ok", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(ActivityProductDetail.this, "resultaldo ok" + RESULT_OK, Toast.LENGTH_LONG).show();
 
                 }else if(resultCode == RESULT_CANCELED){
 
-  //                  Toast.makeText(ActivityProductDetail.this, "resultaldo cancel", Toast.LENGTH_LONG).show();
+                //   Toast.makeText(ActivityProductDetail.this, "resultaldo cancel", Toast.LENGTH_LONG).show();
 
                 }
         }

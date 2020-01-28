@@ -16,5 +16,11 @@ public interface INodeJSPedido {
 
     @GET("consultarPedido/{id_usuario}")
     Call<JsonObject> consultarPedido (@Path("id_usuario") String id_usuario);
+
+    @GET("consultarPedidoProceso/{id_usuario}")
+    Call<JsonObject> consultarPedidoProceso (@Path("id_usuario") String id_usuario);
+
+    @GET("consultarPedidoHistorial/{id_usuario}")
+    Call<JsonObject> consultarPedidoHistorial (@Path("id_usuario") String id_usuario);
 }
 

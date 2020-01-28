@@ -15,7 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class ActivityPerfil extends AppCompatActivity {
-    String nombre;
+    String nombre , correo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,26 +24,32 @@ public class ActivityPerfil extends AppCompatActivity {
 
         SharedPreferences preferences = getSharedPreferences("Preferences" , Context.MODE_PRIVATE);
         nombre = preferences.getString("nombre" , "");
+        correo = preferences.getString("email" , "");
 
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        Button btn = (Button) findViewById(R.id.btn_iniciar_sesion6);
+        TextView btn = (TextView) findViewById(R.id.btn_iniciar_sesion6);
         TextView tvv = (TextView) findViewById(R.id.tvw_cerrar_sesion);
         TextView nombre_usuario = (TextView) findViewById(R.id.textView);
-/*        toolbar.setTitle(getString(R.string.mi_perfil));
+        TextView correo_usuario = (TextView) findViewById(R.id.textView2);
+        toolbar.setTitle(getString(R.string.mi_perfil));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);*/
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
 
         String nombresincomillas = nombre;
         String val2 = nombresincomillas.replace("\"", "");
         nombre_usuario.setText(val2);
+        String correosincomillas = correo;
+        String val3 = correosincomillas.replace("\"", "");
+        correo_usuario.setText(val3);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ActivityPerfil.this , ActivityLogin.class);
+                intent.putExtra("code", 13);
                 intent.setFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
 

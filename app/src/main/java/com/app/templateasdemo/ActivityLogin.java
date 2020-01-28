@@ -1,11 +1,13 @@
 package com.app.templateasdemo;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +51,7 @@ public class ActivityLogin extends AppCompatActivity {
         super.onDestroy();
     }
 
+    int code = 13;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,7 +123,9 @@ public class ActivityLogin extends AppCompatActivity {
             }
         });
 
+
     }
+
 
     private void loginUser (final String correo, final String password) {
 
@@ -185,14 +190,39 @@ public class ActivityLogin extends AppCompatActivity {
     }
 
 
-    private void goToMain() {
-        Intent intent = new Intent();
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
- //       startActivity(intent);
-        setResult(RESULT_OK, intent);
 
-        finish();
+    private void goToMain() {
+
+        Intent intent_login= getIntent();
+        Bundle b = intent_login.getExtras();
+        int extra =  (int)  b.get("code");
+        //  Toast.makeText(getApplicationContext(), "" + extra , Toast.LENGTH_LONG).show();
+      if(extra == code ){
+         // Toast.makeText(ActivityLogin.this, "va a ir al home: ", Toast.LENGTH_LONG).show();
+          Intent intent = new Intent(ActivityLogin.this,MainActivity.class);
+          intent.addFlags((Intent.FLAG_ACTIVITY_CLEAR_TOP));
+          startActivity(intent);
+         // Intent intent = new Intent();
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+          //       startActivity(intent);
+          //setResult(RESULT_OK, intent);
+         // finish();
+      }else{
+          Intent intent3= getIntent();
+          Bundle bq = intent3.getExtras();
+          String idProductoGlobal =  (String)  bq.get("idProducto");
+          //Toast.makeText(ActivityLogin.this, " va a ir al activity Product Detail" , Toast.LENGTH_LONG).show();
+          Intent intent = new Intent(ActivityLogin.this,ActivityProductDetail.class);
+          intent.addFlags((Intent.FLAG_ACTIVITY_CLEAR_TOP));
+          intent.putExtra("idProducto",idProductoGlobal);
+          startActivity(intent);
+          // Intent intent = new Intent(ActivityLogin.this, MainActivity.class);
+           // startActivity(intent);
+      }
+
     }
+
+
 
     private void saveOnPreferences(String email, String password, String nombre, String sucursal, String _id) {
 
@@ -217,5 +247,8 @@ public class ActivityLogin extends AppCompatActivity {
         editTextPass.setText(pass);
 
     }
+
+
+
 
 }

@@ -1,5 +1,7 @@
 package com.example.fragmenttheme2;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,26 +10,41 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.app.adaptertheme2.OrderProcessAdapter;
+import com.app.templateasdemo.ActivityOrderProcessTab;
 import com.app.templateasdemo.R;
+import com.app.templateasdemo.Retrofit.INodeJSPedido;
 import com.example.item.ItemOrderProcess;
 import com.example.util.ItemOffsetDecoration;
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DeliveryFragment extends Fragment {
 
     RecyclerView recyclerViewProcess;
     OrderProcessAdapter orderProcessAdapter;
     ArrayList<ItemOrderProcess> array_process_list;
+
+    String _id;
+
+    private Socket socket;
 
     @Nullable
     @Override
@@ -43,45 +60,81 @@ public class DeliveryFragment extends Fragment {
         ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(getActivity(), R.dimen.item_offset);
         recyclerViewProcess.addItemDecoration(itemDecoration);
 
+        _id = getValueFromSharedPreferences("_id", null);
+
         loadJSONFromAssetOrderProcessList();
+
+        try{
+            socket = IO.socket("http://162.214.67.53:3004");
+            socket.connect();
+            socket.on("estatus pedido", estatusPedido);
+        }catch (URISyntaxException e){
+            e.printStackTrace();
+        }
 
         return rootView;
     }
 
+    private String getValueFromSharedPreferences(String key, String defaultValue){
+        SharedPreferences sharepref = getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        return sharepref.getString(key, defaultValue);
+    }
+
     public ArrayList<ItemOrderProcess> loadJSONFromAssetOrderProcessList() {
-        ArrayList<ItemOrderProcess> locList = new ArrayList<>();
-        String json = null;
-        try {
-            InputStream is = getActivity().getAssets().open("order_process_list.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        try {
-            JSONObject obj = new JSONObject(json);
-            JSONArray m_jArray = obj.getJSONArray("EcommerceApp");
+        //Metodo para consultar Historial Pedidos
+        Retrofit consultarPedidoHistorial = new Retrofit.Builder()
+                .baseUrl("http://162.214.67.53:3000/api/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        INodeJSPedido consultarPedidoInterfas = consultarPedidoHistorial.create(INodeJSPedido.class);
+        String _idsincomillas = _id.replace("\"", "");
+        Call<JsonObject> callexample = consultarPedidoInterfas.consultarPedidoHistorial(_idsincomillas);
+        callexample.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
 
-            for (int i = 0; i < m_jArray.length(); i++) {
-                JSONObject jo_inside = m_jArray.getJSONObject(i);
-                ItemOrderProcess itemOrderProcess = new ItemOrderProcess();
+                if(response.code() == 200) {
 
-                itemOrderProcess.setOrderProcessDate(jo_inside.getString("date"));
-                itemOrderProcess.setOrderProcessNo(jo_inside.getString("order_no"));
-                itemOrderProcess.setOrderProcessTitle(jo_inside.getString("title"));
-                itemOrderProcess.setOrderProcessPrice(jo_inside.getString("order_price"));
-                itemOrderProcess.setOrderProcessStatus(jo_inside.getString("order_status"));
+                    JsonArray pedidos = response.body().get("pedido").getAsJsonArray();
 
-                array_process_list.add(itemOrderProcess);
+                    for (JsonElement obj : pedidos) {
+
+                        JsonObject gsonObj = obj.getAsJsonObject();
+
+                        ItemOrderProcess itemOrderProcess = new ItemOrderProcess();
+
+                        String dtStart = gsonObj.get("creado_en").getAsString();
+                        String subCadena = dtStart.substring(0, 10);
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                        try {
+                            Date date = format.parse(subCadena);
+                            itemOrderProcess.setOrderProcessDate(subCadena);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        itemOrderProcess.setOrderProcessNo(gsonObj.get("_id").getAsString());
+                        //itemOrderProcess.setOrderProcessTitle(jo_inside.getString("title"));
+                        itemOrderProcess.setOrderProcessPrice(gsonObj.get("total").getAsString());
+                        itemOrderProcess.setOrderProcessStatus(gsonObj.get("estatus").getAsString());
+
+                        array_process_list.add(itemOrderProcess);
+
+                    }
+
+                    setAdapterHomeCategoryList();
+
+                }
+
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        setAdapterHomeCategoryList();
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+                Toast.makeText(getActivity(), "Error" , Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
         return array_process_list;
     }
 
@@ -90,5 +143,27 @@ public class DeliveryFragment extends Fragment {
         recyclerViewProcess.setAdapter(orderProcessAdapter);
 
     }
+
+    private Emitter.Listener estatusPedido = new Emitter.Listener() {
+        @Override
+        public void call( final Object... args) {
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    String data = (String) args[0];
+
+                    if(data.equals("Cerrado") || data.equals("Cancelado")) {
+                        array_process_list.clear();
+                        setAdapterHomeCategoryList();
+                        loadJSONFromAssetOrderProcessList();
+                    }
+
+                }
+            });
+
+        }
+    };
+
 }
 

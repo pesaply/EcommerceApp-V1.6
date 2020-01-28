@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.app.templateasdemo.ActivityOrderProcessTab;
 import com.app.templateasdemo.R;
 import com.app.templateasdemo.Retrofit.INodeJSPedido;
 import com.example.adapter.OrderProcesoAdapter;
@@ -42,28 +43,20 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class AddressFragment extends Fragment {
+
     RecyclerView recyclerViewProcess;
     OrderProcesoAdapter orderProcesoAdapter;
     ArrayList<ItemOrderProceso> array_process_list;
-    ArrayList<ItemOrderProceso> array_process_list2;
 
     String _id;
-    String estatuemit;
     String sucursalExistencia;
+
     private Socket socket;
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_address, container, false);
-
 
         array_process_list = new ArrayList<>();
 
@@ -73,13 +66,19 @@ public class AddressFragment extends Fragment {
         recyclerViewProcess.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(getActivity(), R.dimen.item_offset);
 
-
         _id = getValueFromSharedPreferences("_id", null);
         sucursalExistencia = getValueFromSharedPreferences("sucursal", "5df519d8cfd0fe1348d57ff9");
 
-
-
         loadJSONFromAssetOrderProcessList();
+
+        try{
+            socket = IO.socket("http://162.214.67.53:3004");
+            socket.connect();
+            socket.on("estatus pedido", estatusPedido);
+        }catch (URISyntaxException e){
+            e.printStackTrace();
+        }
+
         recyclerViewProcess.addItemDecoration(itemDecoration);
         return rootView;
     }
@@ -89,60 +88,54 @@ public class AddressFragment extends Fragment {
         return sharepref.getString(key, defaultValue);
     }
 
-
-
     public ArrayList<ItemOrderProceso> loadJSONFromAssetOrderProcessList() {
         //Metodo para consultar Pedido
-        Retrofit consultarPedido = new Retrofit.Builder()
+        Retrofit consultarPedidoProceso = new Retrofit.Builder()
                 .baseUrl("http://162.214.67.53:3000/api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        INodeJSPedido consultarCarritoInterfas = consultarPedido.create(INodeJSPedido.class);
+        INodeJSPedido consultarPedidoInterfas = consultarPedidoProceso.create(INodeJSPedido.class);
         String _idsincomillas = _id.replace("\"", "");
-        Call<JsonObject> callexample = consultarCarritoInterfas.consultarPedido(_idsincomillas);
+        Call<JsonObject> callexample = consultarPedidoInterfas.consultarPedidoProceso(_idsincomillas);
         callexample.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
+
                 if(response.code() == 200) {
+
+                    Toast.makeText(getActivity(),"pedido ok", Toast.LENGTH_LONG).show();
+
                     JsonObject jsonObjectpedido = response.body().get("pedido").getAsJsonObject();
 
-                     String _idpedido= jsonObjectpedido.get("_id").getAsString();
-                     String estatus = jsonObjectpedido.get("estatus").getAsString();
-                     String folio = jsonObjectpedido.get("folio").getAsString();
-                     String  fecha = jsonObjectpedido.get("creado_en").getAsString();
+                    String _idpedido= jsonObjectpedido.get("_id").getAsString();
+                    String estatus = jsonObjectpedido.get("estatus").getAsString();
+                    String folio = jsonObjectpedido.get("folio").getAsString();
+                    String  fecha = jsonObjectpedido.get("creado_en").getAsString();
+
                     JSONObject jsonObject = new JSONObject();
+
                     try {
                         jsonObject.put("estatus", estatus);
                         jsonObject.put("_idpedido", _idpedido);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    try{
-                        socket = IO.socket("http://162.214.67.53:3004");
-                        socket.connect();
-                        socket.emit("session socket", jsonObject);
-                        socket.on("estatus pedido", estatusPedido);
 
-                    }catch (URISyntaxException e){
-                        e.printStackTrace();
-                    }
+                    socket.emit("session socket", jsonObject);
 
+                    ItemOrderProceso itemOrderProceso = new ItemOrderProceso();
+                    itemOrderProceso.setOrderProcessDate(estatus);
+                    itemOrderProceso.setOrderProcessNo("#" +_idpedido);
+                    itemOrderProceso.setOrderProcessTitle(fecha);
+                    //itemOrderProceso.setOrderProcessPrice(jo_inside.getString("order_price"));
+                    //itemOrderProceso.setOrderProcessStatus(jo_inside.getString("order_status"));
 
-                           ItemOrderProceso itemOrderProceso = new ItemOrderProceso();
-                           itemOrderProceso.setOrderProcessDate(estatus);
-                           itemOrderProceso.setOrderProcessNo("#" +_idpedido);
-                           itemOrderProceso.setOrderProcessTitle(fecha);
-                          // itemOrderProceso.setOrderProcessPrice(jo_inside.getString("order_price"));
-                           //itemOrderProceso.setOrderProcessStatus(jo_inside.getString("order_status"));
-
-                           array_process_list.add(itemOrderProceso);
-                   setAdapterHomeCategoryList();
-                }else{
-
-                   Toast.makeText(getActivity(), "Sin Pedidos en Proceso", Toast.LENGTH_SHORT).show();
-                }
+                    array_process_list.add(itemOrderProceso);
+                    setAdapterHomeCategoryList();
 
                 }
+
+            }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
@@ -154,6 +147,7 @@ public class AddressFragment extends Fragment {
 
         return array_process_list;
     }
+
     public void setAdapterHomeCategoryList() {
         orderProcesoAdapter = new OrderProcesoAdapter(getActivity(), array_process_list);
         recyclerViewProcess.setAdapter(orderProcesoAdapter);
@@ -167,12 +161,13 @@ public class AddressFragment extends Fragment {
                 @Override
                 public void run() {
                     String data = (String) args[0];
-                    Toast.makeText(getActivity().getApplicationContext(), "Tu Pedido SISCOM esta: " + data, Toast.LENGTH_LONG).show();
-                    array_process_list.get(0).setOrderProcessDate(data);
-                   // Toast.makeText(getActivity().getApplicationContext(), "" + array_process_list, Toast.LENGTH_LONG).show();
 
-
-                    setAdapterHomeCategoryList();
+                    if(!data.equals("Abierto")) {
+                        socket.disconnect();
+                        array_process_list.clear();
+                        setAdapterHomeCategoryList();
+                        loadJSONFromAssetOrderProcessList();
+                    }
 
                 }
             });

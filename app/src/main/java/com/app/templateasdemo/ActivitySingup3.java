@@ -1,6 +1,8 @@
 package com.app.templateasdemo;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +15,9 @@ import android.widget.Toast;
 
 import com.app.templateasdemo.Retrofit.INodeJS;
 import com.app.templateasdemo.Retrofit.RetrofitClient;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -28,6 +33,8 @@ public class ActivitySingup3 extends ActivityPayment {
 
     Button buttonSubmit;
     EditText editTextPassword, editTextConfirmPassword;
+
+    private SharedPreferences prefs;
 
     @Override
     protected void onStop() {
@@ -60,6 +67,8 @@ public class ActivitySingup3 extends ActivityPayment {
         //Init API
         Retrofit retrofit = RetrofitClient.getInstance();
         myAPI = retrofit.create(INodeJS.class);
+
+        prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
 
         buttonSubmit = (Button)findViewById(R.id.btn_submit3);
         editTextPassword=(EditText)findViewById(R.id.edt_password);
@@ -127,6 +136,17 @@ public class ActivitySingup3 extends ActivityPayment {
                             Toast toast = Toast.makeText(ActivitySingup3.this, ""+ s, Toast.LENGTH_LONG);
                             toast.setView(layout);
                             toast.show();
+                            JsonElement jsonElement = new JsonParser().parse(s);
+
+                            JsonObject jsonObject =  jsonElement.getAsJsonObject();
+
+                            jsonObject = jsonObject.getAsJsonObject("user");
+
+                            final String nombre = jsonObject.get("nombre").toString();
+                            final String sucursal = jsonObject.get("sucursal").toString();
+                            final String _id = jsonObject.get("_id").toString();
+
+                            saveOnPreferences(Email, Password, nombre, sucursal, _id);
                             goToMain();
                         }
 
@@ -135,6 +155,20 @@ public class ActivitySingup3 extends ActivityPayment {
         );
 
     }
+    private void saveOnPreferences(String email, String password, String nombre, String sucursal, String _id) {
+
+
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("email", email);
+        editor.putString("pass", password);
+        editor.putString("nombre",nombre);
+        editor.putString("sucursal", sucursal);
+        editor.putString("_id", _id);
+        editor.apply();
+
+    }
+
+
 
     private void goToMain() {
         Intent intent = new Intent(this, ActivitySplashBienvenida.class);
