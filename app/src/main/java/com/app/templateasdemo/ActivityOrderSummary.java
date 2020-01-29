@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.app.templateasdemo.Retrofit.INodeJS;
 import com.app.templateasdemo.Retrofit.INodeJSCarrito;
 import com.app.templateasdemo.Retrofit.INodeJSPedido;
+import com.example.itemCarrito.ItemCarrito;
 import com.example.pedido.ItemPedido;
 import com.example.pedido.Pedido;
 import com.google.gson.JsonArray;
@@ -86,19 +87,20 @@ public class ActivityOrderSummary extends AppCompatActivity {
         txt_total = (TextView) findViewById(R.id.total);
 
         card_view_finalize = (CardView) findViewById(R.id.card_view_finalize);
-            card_view_finalize.setOnClickListener(new View.OnClickListener() {
+        card_view_finalize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 //Metodo para insertar Pedido
                 Retrofit.Builder builder = new Retrofit.Builder()
                         .baseUrl("http://162.214.67.53:3000/api/")
                         .addConverterFactory(GsonConverterFactory.create());
 
-                Retrofit retrofit = builder.build();
+                final Retrofit retrofit = builder.build();
 
                 INodeJSPedido pedidoInterface = retrofit.create(INodeJSPedido.class);
 
-                String _idsincomillas = _id.replace("\"", "");
+                final String _idsincomillas = _id.replace("\"", "");
                 String sucursalExistenciasincomillas = sucursalExistencia.replace("\"", "");
 
                 Pedido pedido = new Pedido(
@@ -117,21 +119,49 @@ public class ActivityOrderSummary extends AppCompatActivity {
                 call.enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
 
-                if(response.code() == 200){
-                    Intent intent_pedidos = new Intent(ActivityOrderSummary.this , ActivityOrderProcessTab.class);
-                    intent_pedidos.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent_pedidos);
-                }else{
+                        if(response.code() == 200) {
 
-                    LayoutInflater inflater = getLayoutInflater();
-                    View layout = inflater.inflate(R.layout.msj3_error_pedido, null);
-                    Toast toast = Toast.makeText(ActivityOrderSummary.this, "", Toast.LENGTH_SHORT);
-                    toast.setView(layout);
-                    toast.show();
+                            //Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
 
-                }
+                            //Metodo para eliminar Carrito
+
+                            INodeJSCarrito carritoInterface = retrofit.create(INodeJSCarrito.class);
+
+                            Call<ItemCarrito> callEliminarCarrito = carritoInterface.eliminarCarrito(_idsincomillas);
+
+                            callEliminarCarrito.enqueue(new Callback<ItemCarrito>() {
+                                @Override
+                                public void onResponse(Call<ItemCarrito> call, Response<ItemCarrito> response) {
+
+                                    if(response.code() == 200) {
+
+                                        removeValueFromSharedPreferencesSchedule();
+                                        removeValueFromSharedPreferencesPayment();
+
+                                        Intent intent_pedidos = new Intent(ActivityOrderSummary.this , ActivityOrderProcessTab.class);
+                                        intent_pedidos.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(intent_pedidos);
+
+                                    }
+
+                                }
+
+                                @Override
+                                public void onFailure(Call<ItemCarrito> call, Throwable t) {
+
+                                }
+                            });
+
+                        } else {
+
+                            LayoutInflater inflater = getLayoutInflater();
+                            View layout = inflater.inflate(R.layout.msj3_error_pedido, null);
+                            Toast toast = Toast.makeText(ActivityOrderSummary.this, "", Toast.LENGTH_SHORT);
+                            toast.setView(layout);
+                            toast.show();
+
+                        }
                     }
 
                     @Override
@@ -146,6 +176,7 @@ public class ActivityOrderSummary extends AppCompatActivity {
 
             }
         });
+
         consultarUsuarioId();
         forma_pago();
         calcularCarrito();
@@ -198,11 +229,17 @@ public class ActivityOrderSummary extends AppCompatActivity {
 
     }
 
-    private String getValueFromSharedPreferencesSchedule(String key, String defaultValue){
+    private String getValueFromSharedPreferencesSchedule(String key, String defaultValue) {
         SharedPreferences sharepref = getSharedPreferences("PreferencesSchedule", Context.MODE_PRIVATE);
         return sharepref.getString(key, defaultValue);
     }
 
+    private void removeValueFromSharedPreferencesSchedule() {
+        SharedPreferences sharepref = getSharedPreferences("PreferencesSchedule", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharepref.edit();
+        editor.clear();
+        editor.commit();
+    }
 
     private void forma_pago() {
 
@@ -220,9 +257,16 @@ public class ActivityOrderSummary extends AppCompatActivity {
 
     }
 
-    private String getValueFromSharedPreferencesPayment(String key, String defaultValue){
+    private String getValueFromSharedPreferencesPayment(String key, String defaultValue) {
         SharedPreferences sharepref = getSharedPreferences("PreferencesPayment", Context.MODE_PRIVATE);
         return sharepref.getString(key, defaultValue);
+    }
+
+    private void removeValueFromSharedPreferencesPayment() {
+        SharedPreferences sharepref = getSharedPreferences("PreferencesPayment", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharepref.edit();
+        editor.clear();
+        editor.commit();
     }
 
     private void consultarUsuarioId() {

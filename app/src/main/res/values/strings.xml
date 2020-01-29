@@ -66,7 +66,8 @@
     <string name="crearcuenta">Crear Cuenta</string>
 
     <!--left navigation drawer-->
-    <string name="menu_home">Home</string>
+    <string name="menu_home">Inicio</string>
+    <string name="menu_perfil">Perfil</string>
     <string name="menu_category">Categoría</string>
     <string name="mi_perfil">Mi Perfil</string>
     <string name="Entrega_Domicilio">Entrega a Domicilio</string>
@@ -78,7 +79,7 @@
     <string name="menu_order">Mi Orden</string>
     <string name="menu_setting">Ajustes</string>
     <string name="menu_search">Buscar</string>
-    <string name="menu_logout">Cerrar Sesión</string>
+    <string name="menu_logout">Mi Perfil</string>
     <string name="menu_theme_change">Change Theme</string>
     <string name="no_item_found">No Item Found</string>
     <string name="notification">Notificationes</string>

@@ -84,9 +84,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                app:headerLayout="@layout/left_nav_header"
-                app:itemIconTint="@color/state_list"
-                app:itemTextColor="@color/state_list"
+                app:labelVisibilityMode="labeled"
+                app:itemIconTint="@color/navigation_default"
+                app:itemTextColor="@color/navigation_default"
                 app:menu="@menu/menu_drawer"
                 android:layout_alignParentBottom="true"
                 android:background="#FFFFFF"/>

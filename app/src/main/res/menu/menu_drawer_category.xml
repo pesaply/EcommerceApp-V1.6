@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="all">
+    <group android:checkableBehavior="single">
 
         <item
             android:id="@+id/menu_go_home"
-            android:checked="false"
             android:icon="@drawable/ic_home"
+            android:checked="false"
             android:title="@string/menu_home" />
-        <!-- android:checkable="false"
-        android:title="@string/menu_home"
-
-         -->
 
         <item
             android:id="@+id/menu_go_category"
             android:checked="true"
+            android:checkable="true"
             android:icon="@drawable/ic_category"
             android:title="@string/menu_category" />
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -28,6 +29,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.adapter.CategoryAdapter;
+import com.example.fragment.HomeFragment;
 import com.example.item.ItemCategory;
 import com.example.util.ItemOffsetDecoration;
 import com.google.android.gms.ads.AdRequest;
@@ -41,6 +43,8 @@ import java.util.ArrayList;
 
 public class ActivityCategory extends AppCompatActivity {
 
+    private DrawerLayout drawerLayout;
+    private FragmentManager fragmentManager;
     ArrayList<ItemCategory> mListItem;
     public RecyclerView recyclerView;
     CategoryAdapter adapter;
@@ -67,6 +71,9 @@ public class ActivityCategory extends AppCompatActivity {
          progressBar = (ProgressBar) findViewById(R.id.progressBar);
          recyclerView = (RecyclerView) findViewById(R.id.vertical_courses_list);
 
+         BottomNavigationView navigationView = (BottomNavigationView) findViewById(R.id.navigation_view_category);
+         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout_category);
+
 
          recyclerView.setHasFixedSize(true);
          recyclerView.setLayoutManager(new GridLayoutManager(ActivityCategory.this, 1));
@@ -77,6 +84,59 @@ public class ActivityCategory extends AppCompatActivity {
          queue = Volley.newRequestQueue(this);
 
          loadJSONFromAssetHomeCategory();
+
+
+         navigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+             @Override
+             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                 drawerLayout.closeDrawers();
+                 switch (menuItem.getItemId()) {
+                     case R.id.menu_go_home:
+                         Intent intent_main = new Intent(ActivityCategory.this , MainActivity.class);
+                         startActivity(intent_main);
+                         return true;
+                     case R.id.menu_go_category:
+
+                         return true;
+
+                     case R.id.menu_go_favourite:
+
+                         Intent intent_pedidos = new Intent(ActivityCategory.this , ActivityOrderProcessTab.class);
+                         startActivity(intent_pedidos);
+                         return true;
+
+
+                        /*toolbar.setTitle(getString(R.string.pedidos));
+                        FavoriteFragment favouriteFragment = new FavoriteFragment();
+                        fragmentManager.beginTransaction().replace(R.id.Container, favouriteFragment).commit();
+                        return true;*/
+
+                    /*case R.id.menu_go_order:
+                        Intent intent_order=new Intent(MainActivity.this,ActivityOrderProcess.class);
+                        startActivity(intent_order);
+                        return true;
+
+                    case R.id.menu_go_setting:
+                        Intent intent_setting=new Intent(MainActivity.this,ActivitySetting.class);
+                        startActivity(intent_setting);
+                        return true;*/
+                     case R.id.menu_go_logout:
+                         Intent intent_logout = new Intent(ActivityCategory.this, ActivityPerfil.class);
+                         intent_logout.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
+                         startActivity(intent_logout);
+                         return true;
+                    /*case R.id.menu_go_theme:
+                                Intent intent_theme=new Intent(MainActivity.this,ActivityTheme.class);
+                                intent_theme.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent_theme);
+                                return true;*/
+                     default:
+                         return true;
+                 }
+
+             }
+         });
 
 
      }

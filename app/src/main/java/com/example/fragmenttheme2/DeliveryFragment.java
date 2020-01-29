@@ -95,7 +95,7 @@ public class DeliveryFragment extends Fragment {
 
                 if(response.code() == 200) {
 
-                    JsonArray pedidos = response.body().get("pedido").getAsJsonArray();
+                    JsonArray pedidos = response.body().get("pedidos").getAsJsonArray();
 
                     for (JsonElement obj : pedidos) {
 
@@ -105,10 +105,10 @@ public class DeliveryFragment extends Fragment {
 
                         String dtStart = gsonObj.get("creado_en").getAsString();
                         String subCadena = dtStart.substring(0, 10);
-                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                         try {
-                            Date date = format.parse(subCadena);
-                            itemOrderProcess.setOrderProcessDate(subCadena);
+                            Date date = StringToDate(subCadena);
+                            String sdate = new SimpleDateFormat("dd-MM-yyyy").format(date);
+                            itemOrderProcess.setOrderProcessDate(sdate);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
@@ -165,5 +165,12 @@ public class DeliveryFragment extends Fragment {
         }
     };
 
-}
+    private Date StringToDate(String sdate) throws ParseException {
+        //Instantiating the SimpleDateFormat class
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        //Parsing the given String to Date object
+        Date date = formatter.parse(sdate);
+        return date;
+    }
 
+}

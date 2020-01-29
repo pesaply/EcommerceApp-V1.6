@@ -23,6 +23,7 @@ import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
@@ -103,34 +104,39 @@ public class AddressFragment extends Fragment {
 
                 if(response.code() == 200) {
 
-                    Toast.makeText(getActivity(),"pedido ok", Toast.LENGTH_LONG).show();
+                    JsonArray pedidos = response.body().get("pedidos").getAsJsonArray();
 
-                    JsonObject jsonObjectpedido = response.body().get("pedido").getAsJsonObject();
+                    for (JsonElement obj : pedidos) {
 
-                    String _idpedido= jsonObjectpedido.get("_id").getAsString();
-                    String estatus = jsonObjectpedido.get("estatus").getAsString();
-                    String folio = jsonObjectpedido.get("folio").getAsString();
-                    String  fecha = jsonObjectpedido.get("creado_en").getAsString();
+                        JsonObject gsonObj = obj.getAsJsonObject();
 
-                    JSONObject jsonObject = new JSONObject();
+                        String _idpedido= gsonObj.get("_id").getAsString();
+                        String estatus = gsonObj.get("estatus").getAsString();
+                        String folio = gsonObj.get("folio").getAsString();
+                        String  fecha = gsonObj.get("creado_en").getAsString();
 
-                    try {
-                        jsonObject.put("estatus", estatus);
-                        jsonObject.put("_idpedido", _idpedido);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                        JSONObject jsonObject = new JSONObject();
+
+                        try {
+                            jsonObject.put("estatus", estatus);
+                            jsonObject.put("_idpedido", _idpedido);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        socket.emit("session socket", jsonObject);
+
+                        ItemOrderProceso itemOrderProceso = new ItemOrderProceso();
+                        itemOrderProceso.setOrderProcessDate(estatus);
+                        itemOrderProceso.setOrderProcessNo("#" +_idpedido);
+                        itemOrderProceso.setOrderProcessTitle(fecha);
+                        //itemOrderProceso.setOrderProcessPrice(jo_inside.getString("order_price"));
+                        //itemOrderProceso.setOrderProcessStatus(jo_inside.getString("order_status"));
+
+                        array_process_list.add(itemOrderProceso);
+
                     }
 
-                    socket.emit("session socket", jsonObject);
-
-                    ItemOrderProceso itemOrderProceso = new ItemOrderProceso();
-                    itemOrderProceso.setOrderProcessDate(estatus);
-                    itemOrderProceso.setOrderProcessNo("#" +_idpedido);
-                    itemOrderProceso.setOrderProcessTitle(fecha);
-                    //itemOrderProceso.setOrderProcessPrice(jo_inside.getString("order_price"));
-                    //itemOrderProceso.setOrderProcessStatus(jo_inside.getString("order_status"));
-
-                    array_process_list.add(itemOrderProceso);
                     setAdapterHomeCategoryList();
 
                 }
@@ -163,7 +169,7 @@ public class AddressFragment extends Fragment {
                     String data = (String) args[0];
 
                     if(!data.equals("Abierto")) {
-                        socket.disconnect();
+                        //socket.disconnect();
                         array_process_list.clear();
                         setAdapterHomeCategoryList();
                         loadJSONFromAssetOrderProcessList();
