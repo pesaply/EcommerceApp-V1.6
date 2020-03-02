@@ -65,7 +65,7 @@ public class DeliveryFragment extends Fragment {
         loadJSONFromAssetOrderProcessList();
 
         try{
-            socket = IO.socket("http://162.214.67.53:3004");
+            socket = IO.socket("http://162.214.67.53:3006");
             socket.connect();
             socket.on("estatus pedido", estatusPedido);
         }catch (URISyntaxException e){
@@ -83,7 +83,7 @@ public class DeliveryFragment extends Fragment {
     public ArrayList<ItemOrderProcess> loadJSONFromAssetOrderProcessList() {
         //Metodo para consultar Historial Pedidos
         Retrofit consultarPedidoHistorial = new Retrofit.Builder()
-                .baseUrl("http://162.214.67.53:3000/api/")
+                .baseUrl("http://162.214.67.53:8000/pedido/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         INodeJSPedido consultarPedidoInterfas = consultarPedidoHistorial.create(INodeJSPedido.class);
@@ -152,6 +152,8 @@ public class DeliveryFragment extends Fragment {
                 @Override
                 public void run() {
                     String data = (String) args[0];
+
+                    Toast.makeText(getActivity(), ""+ data , Toast.LENGTH_LONG).show();
 
                     if(data.equals("Cerrado") || data.equals("Cancelado")) {
                         array_process_list.clear();

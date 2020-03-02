@@ -125,6 +125,8 @@ public class ActivityProductDetail extends AppCompatActivity {
     private boolean ShoppingCart;
     private  int indexproductocarrito;
 
+    TextView txtViewCount;
+
     @Override
     protected void onStop() {
         compositeDisposable.clear();
@@ -342,7 +344,7 @@ public class ActivityProductDetail extends AppCompatActivity {
     private void sendNetworkRequest(final ItemCarrito carrito){
 
        Retrofit.Builder builder  = new Retrofit.Builder()
-               .baseUrl("http://162.214.67.53:3000/api/")
+               .baseUrl("http://162.214.67.53:8000/carrito/")
                .addConverterFactory(GsonConverterFactory.create());
 
        Retrofit retrofit  = builder.build();
@@ -377,7 +379,7 @@ public class ActivityProductDetail extends AppCompatActivity {
     private void updateNetworkRequest(ItemCarrito carrito){
 
         Retrofit.Builder builder  = new Retrofit.Builder()
-                .baseUrl("http://162.214.67.53:3000/api/")
+                .baseUrl("http://162.214.67.53:8000/carrito/")
                 .addConverterFactory(GsonConverterFactory.create());
 
         Retrofit retrofit  = builder.build();
@@ -407,10 +409,10 @@ public class ActivityProductDetail extends AppCompatActivity {
 
     }
 
-    public void consultarcarrito(){
+    public void consultarcarrito() {
        //Metodo para consultar Carrito
         Retrofit consultarCarrito = new Retrofit.Builder()
-                .baseUrl("http://162.214.67.53:3000/api/")
+                .baseUrl("http://162.214.67.53:8000/carrito/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         INodeJSCarrito consultarCarritoInterfas = consultarCarrito.create(INodeJSCarrito.class);
@@ -422,9 +424,11 @@ public class ActivityProductDetail extends AppCompatActivity {
 
                 if(response.body() == null || response.body().get("shoppingCart").isJsonArray()){
                     ShoppingCart = false;
+                    txtViewCount.setText("");
                 }else{
                     JsonArray items = response.body().get("shoppingCart").getAsJsonObject().get("items").getAsJsonArray();
                 ShoppingCart = true;
+                txtViewCount.setText(String.valueOf(items.size()));
                 int index = 0;
                 for(JsonElement obj: items) {
                     index++;
@@ -494,7 +498,7 @@ public class ActivityProductDetail extends AppCompatActivity {
 
     public ArrayList<ItemGallery> loadJSONFromAssetGallery() {
 
-        String producto_url = "http://162.214.67.53:3000/api/obtenerProducto/"+idProductoGlobal;
+        String producto_url = "http://162.214.67.53:8000/producto/obtenerProducto/"+idProductoGlobal;
 
         final JsonObjectRequest request =
                 new JsonObjectRequest(Request.Method.GET, producto_url, null, new Response.Listener<JSONObject>() {
@@ -616,13 +620,13 @@ public class ActivityProductDetail extends AppCompatActivity {
         recyclerViewDetail.setAdapter(adapter_gallery);
 
         itemGalleryList = array_gallery.get(0);
-        Picasso.get().load("http://162.214.67.53:3000/api/obtenerImagenProducto/" + itemGalleryList.getGalleryImage()).into(ImgDetail);
+        Picasso.get().load("http://162.214.67.53:8000/producto/obtenerImagenProducto/" + itemGalleryList.getGalleryImage()).into(ImgDetail);
 
         recyclerViewDetail.addOnItemTouchListener(new RecyclerTouchListener(ActivityProductDetail.this, recyclerViewDetail, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
                 itemGalleryList = array_gallery.get(position);
-                Picasso.get().load("http://162.214.67.53:3000/api/obtenerImagenProducto/" + itemGalleryList.getGalleryImage()).into(ImgDetail);
+                Picasso.get().load("http://162.214.67.53:8000/producto/obtenerImagenProducto/" + itemGalleryList.getGalleryImage()).into(ImgDetail);
             }
 
             @Override
@@ -989,6 +993,22 @@ public class ActivityProductDetail extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_share, menu);
         this.menu = menu;
+
+        final View cart_item = menu.findItem(R.id.menu_cart).getActionView();
+
+        txtViewCount = (TextView) cart_item.findViewById(R.id.txtCount);
+
+        cart_item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //    TODO
+                if (ShoppingCart) {
+                    Intent intent_cart=new Intent(ActivityProductDetail.this, ActivityCart.class);
+                    startActivity(intent_cart);
+                }
+            }
+        });
+
         return super.onCreateOptionsMenu(menu);
     }
 

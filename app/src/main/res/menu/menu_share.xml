@@ -10,6 +10,13 @@
         android:icon="@drawable/fav_hover"/>
 
     <item
+        android:id="@+id/menu_cart"
+        android:title=" "
+        app:actionLayout="@layout/cart_icon"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_cart"/>
+
+    <item
         android:id="@+id/menu_share"
         android:title=" "
         app:showAsAction="always"

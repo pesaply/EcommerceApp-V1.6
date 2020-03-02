@@ -325,7 +325,7 @@ public class ActivityCart extends AppCompatActivity {
 
         //Metodo para consultar Usuario por Id
         Retrofit consultarUsuarioId = new Retrofit.Builder()
-                .baseUrl("http://162.214.67.53:3000/api/")
+                .baseUrl("http://162.214.67.53:8000/usuario/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         INodeJS consultarUsuarioIdInterfas = consultarUsuarioId.create(INodeJS.class);
@@ -375,7 +375,7 @@ public class ActivityCart extends AppCompatActivity {
 
         //Metodo para consultar Carrito
         Retrofit consultarCarrito = new Retrofit.Builder()
-                .baseUrl("http://162.214.67.53:3000/api/")
+                .baseUrl("http://162.214.67.53:8000/carrito/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         INodeJSCarrito consultarCarritoInterfas = consultarCarrito.create(INodeJSCarrito.class);
@@ -396,7 +396,7 @@ public class ActivityCart extends AppCompatActivity {
                     if (items.size() == 0) {
 
                         Retrofit.Builder builder  = new Retrofit.Builder()
-                                .baseUrl("http://162.214.67.53:3000/api/")
+                                .baseUrl("http://162.214.67.53:8000/carrito/")
                                 .addConverterFactory(GsonConverterFactory.create());
 
                         Retrofit retrofit  = builder.build();
@@ -410,6 +410,11 @@ public class ActivityCart extends AppCompatActivity {
                             @Override
                             public void onResponse(Call<ItemCarrito> call, retrofit2.Response<ItemCarrito> response) {
                                 //Toast.makeText(ActivityCart.this , "ok" + response.body() , Toast.LENGTH_LONG).show();
+
+                                //Intent intent = new Intent(ActivityCart.this, MainActivity.class);
+                                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                //startActivity(intent);
+
                                 array_order_place.clear();
                                 txt_subtotal.setText("$0");
                                 txt_desc_total.setText("$0");
@@ -495,7 +500,7 @@ public class ActivityCart extends AppCompatActivity {
 
         //Metodo para consultar Carrito
         Retrofit consultarCarrito = new Retrofit.Builder()
-                .baseUrl("http://162.214.67.53:3000/api/")
+                .baseUrl("http://162.214.67.53:8000/carrito/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         INodeJSCarrito consultarCarritoInterfas = consultarCarrito.create(INodeJSCarrito.class);
@@ -556,7 +561,7 @@ public class ActivityCart extends AppCompatActivity {
     private void updatePiecesCart(ItemCarrito carrito){
 
         Retrofit.Builder builder  = new Retrofit.Builder()
-                .baseUrl("http://162.214.67.53:3000/api/")
+                .baseUrl("http://162.214.67.53:8000/carrito/")
                 .addConverterFactory(GsonConverterFactory.create());
 
         Retrofit retrofit  = builder.build();
@@ -679,7 +684,7 @@ public class ActivityCart extends AppCompatActivity {
 
                 // we need to show the "normal" state
 
-                Picasso.get().load("http://162.214.67.53:3000/api/obtenerImagenProducto/" + itemOrderProduct.getOrderImage()).into(holder.image_item_order_image);
+                Picasso.get().load("http://162.214.67.53:8000/producto/obtenerImagenProducto/" + itemOrderProduct.getOrderImage()).into(holder.image_item_order_image);
                 holder.text_order_title.setText(itemOrderProduct.getOrderName());
                 holder.text_order_seller.setText(getResources().getString(R.string.seller) + itemOrderProduct.getOrderSeller());
 
@@ -721,7 +726,7 @@ public class ActivityCart extends AppCompatActivity {
                         // Consultar existencias del producto
                         //Metodo para consultar Producto
                         Retrofit obtenerProducto = new Retrofit.Builder()
-                                .baseUrl("http://162.214.67.53:3000/api/")
+                                .baseUrl("http://162.214.67.53:8000/producto/")
                                 .addConverterFactory(GsonConverterFactory.create())
                                 .build();
                         INodeJSProducto consultarProductoInterfas = obtenerProducto.create(INodeJSProducto.class);
@@ -852,7 +857,7 @@ public class ActivityCart extends AppCompatActivity {
 
             //Toast.makeText(ActivityCart.this , " " + item.getIdproducto() , Toast.LENGTH_LONG ).show();
             Retrofit.Builder builder  = new Retrofit.Builder()
-                    .baseUrl("http://162.214.67.53:3000/api/")
+                    .baseUrl("http://162.214.67.53:8000/carrito/")
                     .addConverterFactory(GsonConverterFactory.create());
 
             Retrofit retrofit  = builder.build();

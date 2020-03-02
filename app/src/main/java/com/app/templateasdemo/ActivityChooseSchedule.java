@@ -218,7 +218,7 @@ public class ActivityChooseSchedule extends AppCompatActivity {
 
         //Metodo para consultar Usuario por Id
         Retrofit consultarUsuarioId = new Retrofit.Builder()
-                .baseUrl("http://162.214.67.53:3000/api/")
+                .baseUrl("http://162.214.67.53:8000/usuario/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         INodeJS consultarUsuarioIdInterfas = consultarUsuarioId.create(INodeJS.class);

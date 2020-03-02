@@ -8,8 +8,6 @@ import com.github.nkzawa.socketio.client.Socket;
 
 import java.net.URISyntaxException;
 
-
-
 public class SocketApplication extends Application {
 
     private Socket mSocket;

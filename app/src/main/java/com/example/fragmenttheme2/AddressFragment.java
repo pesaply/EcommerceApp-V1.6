@@ -73,7 +73,7 @@ public class AddressFragment extends Fragment {
         loadJSONFromAssetOrderProcessList();
 
         try{
-            socket = IO.socket("http://162.214.67.53:3004");
+            socket = IO.socket("http://162.214.67.53:3006");
             socket.connect();
             socket.on("estatus pedido", estatusPedido);
         }catch (URISyntaxException e){
@@ -92,7 +92,7 @@ public class AddressFragment extends Fragment {
     public ArrayList<ItemOrderProceso> loadJSONFromAssetOrderProcessList() {
         //Metodo para consultar Pedido
         Retrofit consultarPedidoProceso = new Retrofit.Builder()
-                .baseUrl("http://162.214.67.53:3000/api/")
+                .baseUrl("http://162.214.67.53:8000/pedido/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         INodeJSPedido consultarPedidoInterfas = consultarPedidoProceso.create(INodeJSPedido.class);
@@ -125,6 +125,8 @@ public class AddressFragment extends Fragment {
                         }
 
                         socket.emit("session socket", jsonObject);
+
+                        Toast.makeText(getActivity(), "" + jsonObject , Toast.LENGTH_LONG).show();
 
                         ItemOrderProceso itemOrderProceso = new ItemOrderProceso();
                         itemOrderProceso.setOrderProcessDate(estatus);

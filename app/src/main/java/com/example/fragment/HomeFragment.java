@@ -327,7 +327,7 @@ public class HomeFragment extends Fragment {
     }
 
     public ArrayList<ItemCategory> loadJSONFromAssetHomeCategory() {
-        String categorias_url = "http://162.214.67.53:3000/api/obtenerCategoriasVisibles";
+        String categorias_url = "http://162.214.67.53:8000/categoria/obtenerCategoriasVisibles";
 
         JsonObjectRequest request =
                 new JsonObjectRequest(Request.Method.GET, categorias_url, null, new Response.Listener<JSONObject>() {
@@ -344,7 +344,7 @@ public class HomeFragment extends Fragment {
 
                                 itemHomeCategory.setCategoryId(jo_inside.getString("_id"));
                                 itemHomeCategory.setCategoryName(jo_inside.getString("nombre_categoria"));
-                                itemHomeCategory.setCategoryImage(jo_inside.getJSONArray("img").getString(1));
+                                itemHomeCategory.setCategoryImage(jo_inside.getJSONArray("img").getString(0));
                                 itemHomeCategory.setCategoryImageBanner(jo_inside.getJSONArray("img").getString(0));
 
                                 array_category.add(itemHomeCategory);
@@ -383,7 +383,7 @@ public class HomeFragment extends Fragment {
 
 
     public ArrayList<ItemCategoryList> loadJSONFromAssetHomeLatest() {
-        String productos_home_url= "http://162.214.67.53:3000/api/buscarProductosPaginadoVisibles";
+        String productos_home_url= "http://162.214.67.53:8000/producto/buscarProductosPaginadoVisibles";
 
         JsonObjectRequest request =
                 new JsonObjectRequest(Request.Method.GET, productos_home_url, null, new Response.Listener<JSONObject>() {

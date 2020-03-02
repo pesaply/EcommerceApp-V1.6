@@ -115,7 +115,7 @@ public class ActivitySingup2 extends AppCompatActivity{
     private void consultarEscuelas() {
         //Metodo para consultar Cedis
         Retrofit consultarEscuelas = new Retrofit.Builder()
-                .baseUrl("http://162.214.67.53:3000/api/")
+                .baseUrl("http://162.214.67.53:8000/escuela/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         INodeJSchools consultarEscuelasInterfas = consultarEscuelas.create(INodeJSchools.class);
@@ -206,7 +206,7 @@ public class ActivitySingup2 extends AppCompatActivity{
     private void consultarCedis() {
         //Metodo para consultar Cedis
         Retrofit consultarCedis = new Retrofit.Builder()
-                .baseUrl("http://162.214.67.53:3000/api/")
+                .baseUrl("http://162.214.67.53:8000/cedis/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         INodeJSCedis consultarCedisInterfas = consultarCedis.create(INodeJSCedis.class);

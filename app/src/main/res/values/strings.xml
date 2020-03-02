@@ -69,6 +69,7 @@
     <string name="menu_home">Inicio</string>
     <string name="menu_perfil">Perfil</string>
     <string name="menu_category">Categoría</string>
+    <string name="proyectos">Proyectos</string>
     <string name="mi_perfil">Mi Perfil</string>
     <string name="Entrega_Domicilio">Entrega a Domicilio</string>
     <string name="tipo_pedido">Tipo Pedido</string>
@@ -89,6 +90,7 @@
     <string name="home_category">Navegar por Categoria</string>
     <string name="home_latest">Productos</string>
     <string name="home_discount_coupon">Cupones de Descuento</string>
+    <string name="los_mas_vendidos">Los mas vendidos</string>
     <string name="home_trending">Ofertas</string>
     <string name="home_view">Ver Todas</string>
 

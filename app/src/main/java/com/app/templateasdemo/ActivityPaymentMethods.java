@@ -169,7 +169,7 @@ public class ActivityPaymentMethods extends AppCompatActivity {
 
         //Metodo para consultar Carrito
         Retrofit consultarCarrito = new Retrofit.Builder()
-                .baseUrl("http://162.214.67.53:3000/api/")
+                .baseUrl("http://162.214.67.53:8000/carrito/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         INodeJSCarrito consultarCarritoInterfas = consultarCarrito.create(INodeJSCarrito.class);

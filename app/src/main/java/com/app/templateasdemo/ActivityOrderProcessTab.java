@@ -179,7 +179,7 @@ public class ActivityOrderProcessTab extends AppCompatActivity {
             case android.R.id.home:
                 // app icon in action bar clicked; go home
                 try {
-                    socket = IO.socket("http://162.214.67.53:3004");
+                    socket = IO.socket("http://162.214.67.53:3006");
                     socket.disconnect();
                     socket.off("estatus pedido");
                 } catch (URISyntaxException e){
@@ -198,7 +198,7 @@ public class ActivityOrderProcessTab extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         try {
-            socket = IO.socket("http://162.214.67.53:3004");
+            socket = IO.socket("http://162.214.67.53:3006");
             socket.disconnect();
             socket.off("estatus pedido");
         } catch (URISyntaxException e){

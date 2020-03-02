@@ -163,7 +163,7 @@ public class ActivityCategoryList extends AppCompatActivity {
 
     public ArrayList<ItemCategoryList> loadJSONFromAssetCategoryList() {
 
-        String productos_url = "http://162.214.67.53:3000/api/obtenerProductosCategoria/"+idCategoriaGlobal;
+        String productos_url = "http://162.214.67.53:8000/categoria/obtenerProductosCategoria/tu"+idCategoriaGlobal;
 
         JsonObjectRequest request =
                 new JsonObjectRequest(Request.Method.GET, productos_url, null, new Response.Listener<JSONObject>() {

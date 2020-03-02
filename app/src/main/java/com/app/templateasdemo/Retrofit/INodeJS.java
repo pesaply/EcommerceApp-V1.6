@@ -11,7 +11,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface INodeJS {
-    @POST("registerApp")
+    @POST("/usuario/registerApp")
     @FormUrlEncoded
     Observable<String> registerUser(@Field("nombre") String nombre,
                                     @Field("apellidos") String apellidos,
@@ -23,7 +23,7 @@ public interface INodeJS {
                                     @Field("password") String password,
                                     @Field("confirm_password") String confirm_password);
 
-    @POST ("loginApp")
+    @POST ("/usuario/loginApp")
     @FormUrlEncoded
     Observable<String> loginUser(@Field("correo") String correo,
                                  @Field("password") String password);

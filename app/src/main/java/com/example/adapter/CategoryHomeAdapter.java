@@ -42,7 +42,7 @@ public class CategoryHomeAdapter extends RecyclerView.Adapter<CategoryHomeAdapte
         final ItemCategory itemCategory = dataList.get(position);
 
         holder.text_cat_title.setText(itemCategory.getCategoryName());
-        Picasso.get().load("http://162.214.67.53:3000/api/obtenerImagenProducto/" + itemCategory.getCategoryImage()).into(holder.image_cat);
+        Picasso.get().load("http://162.214.67.53:8000/categoria/obtenerImagenCategoria/" + itemCategory.getCategoryImage()).into(holder.image_cat);
 
         holder.lyt_parent.setOnClickListener(new View.OnClickListener() {
             @Override

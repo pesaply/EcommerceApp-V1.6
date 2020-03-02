@@ -17,7 +17,7 @@
             android:id="@+id/menu_go_category"
             android:checked="true"
             android:icon="@drawable/ic_category"
-            android:title="@string/menu_category" />
+            android:title="@string/proyectos" />
 
 
         <item

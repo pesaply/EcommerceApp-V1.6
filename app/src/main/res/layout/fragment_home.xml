@@ -196,7 +196,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:text="@string/home_discount_coupon"
+                            android:text="@string/los_mas_vendidos"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="@color/black" />
 

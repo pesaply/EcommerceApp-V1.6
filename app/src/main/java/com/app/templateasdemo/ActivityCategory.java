@@ -83,7 +83,7 @@ public class ActivityCategory extends AppCompatActivity {
 
          queue = Volley.newRequestQueue(this);
 
-         loadJSONFromAssetHomeCategory();
+        // loadJSONFromAssetHomeCategory();
 
 
          navigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -142,7 +142,7 @@ public class ActivityCategory extends AppCompatActivity {
      }
     public ArrayList<ItemCategory> loadJSONFromAssetHomeCategory() {
 
-        String categorias_url = "http://162.214.67.53:3000/api/obtenerCategoriasVisibles";
+        String categorias_url = "http://162.214.67.53:8000/categoria/obtenerCategoriasVisibles";
 
         JsonObjectRequest request =
                 new JsonObjectRequest(Request.Method.GET, categorias_url, null, new Response.Listener<JSONObject>() {

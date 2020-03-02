@@ -13,7 +13,6 @@ public interface INodeJSPedido {
     @POST("insertarPedido")
     Call<JsonObject> insertarPedido(@Body Pedido Pedido);
 
-
     @GET("consultarPedido/{id_usuario}")
     Call<JsonObject> consultarPedido (@Path("id_usuario") String id_usuario);
 

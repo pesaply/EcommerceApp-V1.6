@@ -93,7 +93,7 @@ public class ActivityOrderSummary extends AppCompatActivity {
 
                 //Metodo para insertar Pedido
                 Retrofit.Builder builder = new Retrofit.Builder()
-                        .baseUrl("http://162.214.67.53:3000/api/")
+                        .baseUrl("http://162.214.67.53:8000/pedido/")
                         .addConverterFactory(GsonConverterFactory.create());
 
                 final Retrofit retrofit = builder.build();
@@ -122,11 +122,17 @@ public class ActivityOrderSummary extends AppCompatActivity {
 
                         if(response.code() == 200) {
 
-                            //Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
 
                             //Metodo para eliminar Carrito
 
-                            INodeJSCarrito carritoInterface = retrofit.create(INodeJSCarrito.class);
+                            Retrofit.Builder builder2 = new Retrofit.Builder()
+                                    .baseUrl("http://162.214.67.53:8000/carrito/")
+                                    .addConverterFactory(GsonConverterFactory.create());
+
+                            final Retrofit retrofit2 = builder2.build();
+
+                            INodeJSCarrito carritoInterface = retrofit2.create(INodeJSCarrito.class);
 
                             Call<ItemCarrito> callEliminarCarrito = carritoInterface.eliminarCarrito(_idsincomillas);
 
@@ -138,6 +144,8 @@ public class ActivityOrderSummary extends AppCompatActivity {
 
                                         removeValueFromSharedPreferencesSchedule();
                                         removeValueFromSharedPreferencesPayment();
+
+                                        Toast.makeText(getApplicationContext(), "pasa al otro activity", Toast.LENGTH_LONG).show();
 
                                         Intent intent_pedidos = new Intent(ActivityOrderSummary.this , ActivityOrderProcessTab.class);
                                         intent_pedidos.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -273,7 +281,7 @@ public class ActivityOrderSummary extends AppCompatActivity {
 
         //Metodo para consultar Usuario por Id
         Retrofit consultarUsuarioId = new Retrofit.Builder()
-                .baseUrl("http://162.214.67.53:3000/api/")
+                .baseUrl("http://162.214.67.53:8000/usuario/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         INodeJS consultarUsuarioIdInterfas = consultarUsuarioId.create(INodeJS.class);
@@ -311,7 +319,7 @@ public class ActivityOrderSummary extends AppCompatActivity {
 
         //Metodo para consultar Carrito
         Retrofit consultarCarrito = new Retrofit.Builder()
-                .baseUrl("http://162.214.67.53:3000/api/")
+                .baseUrl("http://162.214.67.53:8000/carrito/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         INodeJSCarrito consultarCarritoInterfas = consultarCarrito.create(INodeJSCarrito.class);

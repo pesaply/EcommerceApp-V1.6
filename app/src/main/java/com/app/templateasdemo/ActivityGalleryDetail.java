@@ -112,7 +112,7 @@ public class ActivityGalleryDetail extends AppCompatActivity {
     public ArrayList<ItemGallery> loadJSONFromAssetGallery() {
         //ArrayList<ItemGallery> locList = new ArrayList<>();
         //String json = null;
-        String producto_url = "http://162.214.67.53:3000/api/obtenerProducto/"+idProductoGlobal;
+        String producto_url = "http://162.214.67.53:8000/producto/obtenerProducto/"+idProductoGlobal;
 
         JsonObjectRequest request =
                 new JsonObjectRequest(Request.Method.GET, producto_url, null, new Response.Listener<JSONObject>() {
@@ -180,7 +180,7 @@ public class ActivityGalleryDetail extends AppCompatActivity {
         viewpager_slider.setAdapter(adapter);
 
         itemGalleryList = array_gallery.get(0);
-        Picasso.get().load("http://162.214.67.53:3000/api/obtenerImagenProducto/" + itemGalleryList.getGalleryImage()).into(image_slider);
+        Picasso.get().load("http://162.214.67.53:8000/producto/obtenerImagenProducto/" + itemGalleryList.getGalleryImage()).into(image_slider);
 
     }
 
@@ -213,7 +213,7 @@ public class ActivityGalleryDetail extends AppCompatActivity {
             itemGalleryList = array_gallery.get(position);
             image_slider = (ImageView) imageLayout.findViewById(R.id.image_product_image);
 
-            Picasso.get().load("http://162.214.67.53:3000/api/obtenerImagenProducto/" + itemGalleryList.getGalleryImage()).placeholder(R.drawable.placeholder320).into(image_slider);
+            Picasso.get().load("http://162.214.67.53:8000/producto/obtenerImagenProducto/" + itemGalleryList.getGalleryImage()).placeholder(R.drawable.placeholder320).into(image_slider);
 
             container.addView(imageLayout, 0);
             return imageLayout;

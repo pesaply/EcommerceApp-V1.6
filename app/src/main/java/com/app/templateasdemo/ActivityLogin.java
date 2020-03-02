@@ -34,8 +34,6 @@ public class ActivityLogin extends AppCompatActivity {
     INodeJS myAPI;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-
-
     Button buttonLogin,buttonSkip,buttonForgotPass,buttonRegister;
     EditText editTextEmail,editTextPass;
 

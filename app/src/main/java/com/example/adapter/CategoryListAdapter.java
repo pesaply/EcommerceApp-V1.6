@@ -47,7 +47,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
 
         holder.text_cat_list_title.setText(itemCategorylist.getCategoryListName());
         holder.text_cat_list_price.setText("$"+itemCategorylist.getCategoryListPrice());
-        Picasso.get().load("http://162.214.67.53:3000/api/obtenerImagenProducto/"+itemCategorylist.getCategoryListImage()).into(holder.image_cat_list);
+        Picasso.get().load("http://162.214.67.53:8000/producto/obtenerImagenProducto/"+itemCategorylist.getCategoryListImage()).into(holder.image_cat_list);
 
        /* holder.lyt_parent.setOnClickListener(new View.OnClickListener() {
             @Override

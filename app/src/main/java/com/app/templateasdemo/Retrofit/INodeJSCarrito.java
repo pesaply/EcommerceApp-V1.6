@@ -22,7 +22,6 @@ public interface INodeJSCarrito {
     Call<ItemCarrito> insertarCarrito (@Path("id_usuario") String id_usuario ,
                                         @Body ItemCarrito productoCarrito);
 
-
     @GET("consultarCarrito/{id_usuario}")
     Call<JsonObject> consultarCarrito (@Path("id_usuario") String id_usuario);
 

@@ -86,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
 
     String _id;
 
+    Boolean minicarrito = false;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -220,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<ItemOrderProduct> consultarcarrito(){
         //Metodo para consultar Carrito
         Retrofit consultarCarrito = new Retrofit.Builder()
-                .baseUrl("http://162.214.67.53:3000/api/")
+                .baseUrl("http://162.214.67.53:8000/carrito/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         INodeJSCarrito consultarCarritoInterfas = consultarCarrito.create(INodeJSCarrito.class);
@@ -287,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
     //Metodo para consultar Carrito
     public void  minicarrito() {
         Retrofit consultarCarrito = new Retrofit.Builder()
-                .baseUrl("http://162.214.67.53:3000/api/")
+                .baseUrl("http://162.214.67.53:8000/carrito/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         INodeJSCarrito consultarCarritoInterfas = consultarCarrito.create(INodeJSCarrito.class);
@@ -298,11 +300,12 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
 
                 if (response.body() == null || response.body().get("shoppingCart").isJsonArray()) {
-                    //txtViewCount.setText(String.valueOf(0));
+                    txtViewCount.setText("");
+                    minicarrito = false;
                 } else {
                     JsonArray items = response.body().get("shoppingCart").getAsJsonObject().get("items").getAsJsonArray();
-                    //txtViewCount.setText(String.valueOf(items.size()));
-
+                    txtViewCount.setText(String.valueOf(items.size()));
+                    minicarrito = true;
                 }
 
                 //Toast.makeText(MainActivity.this , "" + response.body() , Toast.LENGTH_LONG).show();
@@ -397,10 +400,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //    TODO
-                Intent intent_cart=new Intent(MainActivity.this,ActivityCart.class);
-                startActivity(intent_cart);
-                //showOrderPlace();
-
+                if (minicarrito) {
+                    Intent intent_cart=new Intent(MainActivity.this,ActivityCart.class);
+                    startActivity(intent_cart);
+                }
                 //showOrderPlace();
             }
         });
@@ -566,7 +569,7 @@ public class MainActivity extends AppCompatActivity {
         public void onBindViewHolder(final OrderPlaceAdapter.ItemRowHolder holder, final int position) {
             final ItemOrderProduct itemOrderProduct = dataList.get(position);
 
-            Picasso.get().load("http://162.214.67.53:3000/api/obtenerImagenProducto/" + itemOrderProduct.getOrderImage()).into(holder.image_item_order_image);
+            Picasso.get().load("http://162.214.67.53:8000/producto/obtenerImagenProducto/" + itemOrderProduct.getOrderImage()).into(holder.image_item_order_image);
             holder.text_order_title.setText(itemOrderProduct.getOrderName());
             holder.text_order_seller.setText(getResources().getString(R.string.seller) + itemOrderProduct.getOrderSeller());
             holder.text_order_price.setText("Precio: " + String.valueOf(itemOrderProduct.getOrderPrice()));
@@ -602,7 +605,7 @@ public class MainActivity extends AppCompatActivity {
 
                     Toast.makeText(MainActivity.this , " " + itemOrderProduct.getIdproducto() , Toast.LENGTH_LONG ).show();
                     Retrofit.Builder builder  = new Retrofit.Builder()
-                            .baseUrl("http://162.214.67.53:3000/api/")
+                            .baseUrl("http://162.214.67.53:8000/carrito/")
                             .addConverterFactory(GsonConverterFactory.create());
 
                     Retrofit retrofit  = builder.build();

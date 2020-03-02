@@ -152,7 +152,7 @@ public class ActivityLatestList extends AppCompatActivity {
 
 
     public ArrayList<ItemCategoryList> loadJSONFromAssetCategoryList() {
-        String productos_home_url= "http://162.214.67.53:3000/api/buscarProductosPaginadoVisibles";
+        String productos_home_url= "http://162.214.67.53:8000/producto/buscarProductosPaginadoVisibles";
 
         JsonObjectRequest request =
                 new JsonObjectRequest(Request.Method.GET, productos_home_url, null, new Response.Listener<JSONObject>() {

@@ -154,7 +154,7 @@ public class ActivitySearchHome extends AppCompatActivity {
 
         adapter.notifyDataSetChanged();*/
 
-        String productos_url = "http://162.214.67.53:3000/api/buscadorProductos/" + textToSearch;
+        String productos_url = "http://162.214.67.53:8000/producto/buscadorProductos/" + textToSearch;
 
         JsonObjectRequest request =
                 new JsonObjectRequest(Request.Method.GET, productos_url, null, new Response.Listener<JSONObject>() {
@@ -171,7 +171,7 @@ public class ActivitySearchHome extends AppCompatActivity {
                                 JSONObject jo_inside = mJSONArray.getJSONObject(i);
 
                                 if (jo_inside.has("descripcion_corta")) {
-                                    itemsResults[i] = jo_inside.getString("descripcion_corta") + " | " + jo_inside.getString("cveproducto");
+                                    itemsResults[i] = jo_inside.getString("cveproducto") + " | " + jo_inside.getString("descripcion_corta");
                                 } else {
                                     itemsResults[i] = jo_inside.getString("cveproducto");
                                 }

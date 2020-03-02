@@ -47,7 +47,7 @@ public class ActivityPdf extends AppCompatActivity {
 */
 
         //Url Ejemplo:
-        String pdf = "http://162.214.67.53:3000/api/obtenerPdfProducto/" +getIntent().getStringExtra("pdfD");
+        String pdf = "http://162.214.67.53:8000/producto/obtenerPdfProducto/" +getIntent().getStringExtra("pdfD");
 
         //Carga url de .PDF en WebView  mediante Google Drive Viewer.
         webView.loadUrl("http://drive.google.com/viewerng/viewer?embedded=true&url=" + pdf);
