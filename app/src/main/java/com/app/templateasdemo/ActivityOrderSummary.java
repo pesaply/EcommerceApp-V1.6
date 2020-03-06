@@ -139,13 +139,11 @@ public class ActivityOrderSummary extends AppCompatActivity {
                             callEliminarCarrito.enqueue(new Callback<ItemCarrito>() {
                                 @Override
                                 public void onResponse(Call<ItemCarrito> call, Response<ItemCarrito> response) {
-
                                     if(response.code() == 200) {
 
                                         removeValueFromSharedPreferencesSchedule();
                                         removeValueFromSharedPreferencesPayment();
 
-                                        Toast.makeText(getApplicationContext(), "pasa al otro activity", Toast.LENGTH_LONG).show();
 
                                         Intent intent_pedidos = new Intent(ActivityOrderSummary.this , ActivityOrderProcessTab.class);
                                         intent_pedidos.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

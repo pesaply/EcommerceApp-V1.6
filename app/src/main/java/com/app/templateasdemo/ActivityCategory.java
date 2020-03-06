@@ -58,7 +58,7 @@ public class ActivityCategory extends AppCompatActivity {
          super.onCreate(savedInstanceState);
          setContentView(R.layout.activity_category);
          final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-         toolbar.setTitle(getString(R.string.menu_category));
+         toolbar.setTitle(getString(R.string.menu_proyectos));
          setSupportActionBar(toolbar);
          getSupportActionBar().setDisplayHomeAsUpEnabled(true);
          getSupportActionBar().setDisplayShowHomeEnabled(true);

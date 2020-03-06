@@ -49,6 +49,7 @@ public class CategoryHomeAdapter extends RecyclerView.Adapter<CategoryHomeAdapte
             public void onClick(View v) {
 
                 Intent intent = new Intent(mContext, ActivityCategoryList.class);
+                intent.putExtra("idCategoria", itemCategory.getCategoryId());
                 mContext.startActivity(intent);
             }
         });

@@ -163,7 +163,7 @@ public class ActivityCategoryList extends AppCompatActivity {
 
     public ArrayList<ItemCategoryList> loadJSONFromAssetCategoryList() {
 
-        String productos_url = "http://162.214.67.53:8000/categoria/obtenerProductosCategoria/tu"+idCategoriaGlobal;
+        String productos_url = "http://162.214.67.53:8000/producto/obtenerProductosCategoria/"+idCategoriaGlobal;
 
         JsonObjectRequest request =
                 new JsonObjectRequest(Request.Method.GET, productos_url, null, new Response.Listener<JSONObject>() {
@@ -188,7 +188,7 @@ public class ActivityCategoryList extends AppCompatActivity {
                                     String sucursal = sucursalExistencia;
                                     String val2 = sucursal.replace("\"", "");
 
-                                    Toast.makeText(ActivityCategoryList.this , "ok" + sucursal ,  Toast.LENGTH_LONG).show();
+                                   // Toast.makeText(ActivityCategoryList.this , "ok" + sucursal ,  Toast.LENGTH_LONG).show();
 
                                     if(val1.equals(val2)){
 

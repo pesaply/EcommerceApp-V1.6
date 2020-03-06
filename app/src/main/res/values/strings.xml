@@ -69,6 +69,7 @@
     <string name="menu_home">Inicio</string>
     <string name="menu_perfil">Perfil</string>
     <string name="menu_category">Categoría</string>
+    <string name="menu_proyectos">Proyectos</string>
     <string name="proyectos">Proyectos</string>
     <string name="mi_perfil">Mi Perfil</string>
     <string name="Entrega_Domicilio">Entrega a Domicilio</string>
@@ -99,7 +100,7 @@
     <string name="product_delivery">Delivery : -</string>
     <string name="product_description">Descripción:</string>
     <string name="no_cost">No Cost EMI</string>
-    <string name="product_review">Product Review : -</string>
+    <string name="product_review">Calificaciones y Reseñas</string>
     <string name="select_size">Select Size</string>
     <string name="select_color">Especificacion Tecnica</string>
     <string name="select_filter">Filters</string>

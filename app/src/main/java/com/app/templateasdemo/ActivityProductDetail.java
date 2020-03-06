@@ -181,11 +181,11 @@ public class ActivityProductDetail extends AppCompatActivity {
         text_select_color = (TextView) findViewById(R.id.text_select_color);
         text_product_buy = (TextView) findViewById(R.id.text_product_buy);
         text_product_cart = (TextView) findViewById(R.id.text_product_cart);
-        edt_pincode = (EditText) findViewById(R.id.edt_delivery_code);
+        //edt_pincode = (EditText) findViewById(R.id.edt_delivery_code);
         web_desc = (TextView) findViewById(R.id.web_product_desc);
         ratingView = (RatingView) findViewById(R.id.rating_product_rating);
         recycler_detail_review = (RecyclerView) findViewById(R.id.vertical_detail_review);
-        edt_pincode.setFocusable(false);
+       // edt_pincode.setFocusable(false);
 
         //Init API
         Retrofit retrofit =  RetrofitClient.getInstance();
@@ -497,59 +497,46 @@ public class ActivityProductDetail extends AppCompatActivity {
     }
 
     public ArrayList<ItemGallery> loadJSONFromAssetGallery() {
-
         String producto_url = "http://162.214.67.53:8000/producto/obtenerProducto/"+idProductoGlobal;
-
         final JsonObjectRequest request =
                 new JsonObjectRequest(Request.Method.GET, producto_url, null, new Response.Listener<JSONObject>() {
 
 
                     @Override
                     public void onResponse(JSONObject response) {
-
-
-
                         JSONObject obj = null;
                         JSONArray jsonArray = new JSONArray();
-
                         for (int i = 1; i < 5; i++) {
                             obj = new JSONObject();
+
                             try {
-                                obj.put("gallery_image", response.getJSONObject("producto").getJSONArray("img"+i).getString(1));
 
+                               // if (response.getJSONObject("producto").has("img1" +i) && response.getJSONObject("producto").getJSONArray("img1").length() > 0) {
+                                    obj.put("gallery_image", response.getJSONObject("producto").getJSONArray("img"+i).getString(1));
+                                  //  jsonArray.put(obj);
+                                //}
 
+                                //obj.put("gallery_image", response.getJSONObject("producto").getJSONArray("img"+i).getString(1));
                                // Toast.makeText(getApplicationContext(), ""+obj, Toast.LENGTH_LONG).show();
-
-
 
                             } catch (JSONException e) {
                                 // TODO Auto-generated catch block
                                 e.printStackTrace();
                             }
+
                             jsonArray.put(obj);
 
                         }
 
-
-
-
                         try {
-
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jo_inside = jsonArray.getJSONObject(i);
                                 ItemGallery itemGalleryList = new ItemGallery();
 
                                 itemGalleryList.setGalleryImage(jo_inside.getString("gallery_image"));
-
                                 array_gallery.add(itemGalleryList);
-
-                                //Toast.makeText(getApplicationContext(), ""+array_gallery, Toast.LENGTH_LONG).show();
-
-
-
+                                //Toast.makeText(getApplicationContext(), ""+jsonArray, Toast.LENGTH_LONG).show();
                             }
-
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -573,7 +560,7 @@ public class ActivityProductDetail extends AppCompatActivity {
 
                                 if(val1.equals(val2)){
 
-                                    text_product_price.setText("$"+ cedisobject.getString("precio_inicial"));
+                                    text_product_price.setText("Precio: $"+ cedisobject.getString("precio_inicial"));
                                     existenciaGlobal = cedisobject.getInt("existencia");
                                 }
 
@@ -584,8 +571,6 @@ public class ActivityProductDetail extends AppCompatActivity {
 
 
                             //text_product_price.setText("$"+response.getJSONObject("producto").getString("precio_lista"));
-                            text_no_cost.setText("No Cost EMI");
-                            text_product_rate.setText("4.8");
                             web_desc.setText(response.getJSONObject("producto").getString("dscproducto"));
                             pdfD.setText(response.getJSONObject("producto").getString("pdf"));
 
@@ -619,8 +604,15 @@ public class ActivityProductDetail extends AppCompatActivity {
         adapter_gallery = new GalleryAdapter(ActivityProductDetail.this, array_gallery);
         recyclerViewDetail.setAdapter(adapter_gallery);
 
-        itemGalleryList = array_gallery.get(0);
-        Picasso.get().load("http://162.214.67.53:8000/producto/obtenerImagenProducto/" + itemGalleryList.getGalleryImage()).into(ImgDetail);
+
+
+
+
+       //Toast.makeText(getApplicationContext(), ""+ itemGalleryList.getGalleryImage(), Toast.LENGTH_LONG).show();
+        if(array_gallery.size() > 0){
+            itemGalleryList = array_gallery.get(0);
+            Picasso.get().load("http://162.214.67.53:8000/producto/obtenerImagenProducto/" + itemGalleryList.getGalleryImage()).into(ImgDetail);
+        }
 
         recyclerViewDetail.addOnItemTouchListener(new RecyclerTouchListener(ActivityProductDetail.this, recyclerViewDetail, new ClickListener() {
             @Override
@@ -635,16 +627,19 @@ public class ActivityProductDetail extends AppCompatActivity {
             }
         }));
 
-        ImgDetail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent_gallery = new Intent(ActivityProductDetail.this, ActivityGalleryDetail.class);
-                intent_gallery.putExtra("idProducto",idProductoGlobal);
-                startActivity(intent_gallery);
-                ///////////////////////////////////////////////////////
 
-            }
-        });
+        if(array_gallery.size() > 0){
+            ImgDetail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent_gallery = new Intent(ActivityProductDetail.this, ActivityGalleryDetail.class);
+                    intent_gallery.putExtra("idProducto",idProductoGlobal);
+                    startActivity(intent_gallery);
+                    ///////////////////////////////////////////////////////
+
+                }
+            });
+        }
         loadJSONFromAssetReview();
     }
 

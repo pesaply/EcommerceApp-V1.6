@@ -1,6 +1,7 @@
 package com.example.fragmenttheme2;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,8 +15,11 @@ import android.widget.Toast;
 
 import com.app.adaptertheme2.OrderProcessAdapter;
 import com.app.templateasdemo.ActivityOrderProcessTab;
+import com.app.templateasdemo.MainActivity;
 import com.app.templateasdemo.R;
 import com.app.templateasdemo.Retrofit.INodeJSPedido;
+import com.app.templateasdemo.SliderActivity;
+import com.app.templateasdemo.Splash_Activity;
 import com.example.item.ItemOrderProcess;
 import com.example.util.ItemOffsetDecoration;
 import com.github.nkzawa.emitter.Emitter;
@@ -43,6 +47,7 @@ public class DeliveryFragment extends Fragment {
     ArrayList<ItemOrderProcess> array_process_list;
 
     String _id;
+    String nombre;
 
     private Socket socket;
 
@@ -62,7 +67,17 @@ public class DeliveryFragment extends Fragment {
 
         _id = getValueFromSharedPreferences("_id", null);
 
-        loadJSONFromAssetOrderProcessList();
+        nombre =  getValueFromSharedPreferences("nombre","");
+
+
+        if(!nombre.equals("")) {
+            loadJSONFromAssetOrderProcessList();
+        }else{
+
+        }
+
+
+
 
         try{
             socket = IO.socket("http://162.214.67.53:3006");
@@ -174,5 +189,7 @@ public class DeliveryFragment extends Fragment {
         Date date = formatter.parse(sdate);
         return date;
     }
+
+
 
 }

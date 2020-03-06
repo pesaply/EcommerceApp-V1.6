@@ -51,6 +51,7 @@ public class AddressFragment extends Fragment {
 
     String _id;
     String sucursalExistencia;
+    String nombre;
 
     private Socket socket;
 
@@ -69,9 +70,14 @@ public class AddressFragment extends Fragment {
 
         _id = getValueFromSharedPreferences("_id", null);
         sucursalExistencia = getValueFromSharedPreferences("sucursal", "5df519d8cfd0fe1348d57ff9");
+        nombre =  getValueFromSharedPreferences("nombre","");
 
-        loadJSONFromAssetOrderProcessList();
+        if(!nombre.equals("")) {
+            loadJSONFromAssetOrderProcessList();
 
+        }else{
+
+        }
         try{
             socket = IO.socket("http://162.214.67.53:3006");
             socket.connect();
@@ -125,9 +131,6 @@ public class AddressFragment extends Fragment {
                         }
 
                         socket.emit("session socket", jsonObject);
-
-                        Toast.makeText(getActivity(), "" + jsonObject , Toast.LENGTH_LONG).show();
-
                         ItemOrderProceso itemOrderProceso = new ItemOrderProceso();
                         itemOrderProceso.setOrderProcessDate(estatus);
                         itemOrderProceso.setOrderProcessNo("#" +_idpedido);
